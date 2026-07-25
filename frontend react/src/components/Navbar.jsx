@@ -1,22 +1,15 @@
 import { Link } from 'react-router-dom';  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSketch, faFacebookF, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
+import myPic from '../assets/images/pic2.webp'
+import useTypingEffect from '../hooks/useTypingEffect';
 
 const navLinks = [
   { label: 'Home', to: '/home', title: 'Home'},
   { label: 'About', to: '/about', title: 'About'}, 
   { label: 'Portfolio', to: '/projects', title: 'Projects'}, 
   { label: 'Contact', to: '/contact', title: 'Contact'},
-]
-
-const socials = [
-  { label: <FontAwesomeIcon icon={faFacebookF}/>,  href: 'https://www.facebook.com/TatoCSV/', target: '_blank', className: 'bg-[#1877f2]', title: 'Facebook' },
-  { label: <FontAwesomeIcon icon={faXTwitter}/>,  href: 'https://x.com', target: '_blank', className: 'bg-black', title: 'X' },
-  { label: 'Bē', href: 'https://behance.net', target: '_blank', className: 'bg-[#1769ff]', title: 'Behance' },
-  { label: 'in', href: 'https://linkedin.com', target: '_blank', className: 'bg-[#0a66c2]', title: 'LinkedIn' },
-  { label: <FontAwesomeIcon icon={faSketch}/>,  href: 'https://sketch.com', target: '_blank', className: 'bg-[#4a9eff]', title: 'Sketch' },
 ]
 
 export default function Navbar() {
@@ -47,16 +40,25 @@ return () => {
 };
 }, []);
 
+const titles = ["Full-Stack Junior", "Ciego En Potencia", "Autista", "React Developer",]
+const typedText = useTypingEffect(titles, 80, 50, 1500);
+
   return (  
-    <nav className="bg-white h-17.5 flex items-center justify-between px-[5%] sticky top-0 z-50 shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
+    <nav className="bg-white h-17.5 flex items-center justify-between lg:justify-around px-[5%] sticky top-0 z-50 shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
       
       {/* Logo */}
-      <a href="/home" className="font-semibold text-[1.4rem] text-[#1a1a2e] no-underline">
-        Tato <span className="text-blue-500">CSV</span>
+      <a href="/home" className="inline-flex w-2xs items-center gap-2 font-semibold text-[1.4rem] text-[#1a1a2e] no-underline">
+        <img src={myPic} alt="My face" className="w-auto h-[2.5em] border-2 rounded-sm object-contain" />
+        <div className="flex flex-col">  
+          <p className="text-xl inset-0 no-underline">Tato <span className="text-blue-500 font-bold">CSV</span></p>
+          <p className="text-[.600em] leading-relaxed after:content-['|'] after:animate-ping">
+            {typedText}
+          </p>
+        </div>
       </a>
 
       {/* Nav links Medium and Wider Screens*/}
-      <ul className="hidden lg:flex space-x-6 gap-9 list-none">
+      <ul className="hidden md:flex space-x-6 gap-9 list-none">
         {navLinks.map((link) => (
           <li key={link.title}>
             <Link
@@ -69,24 +71,10 @@ return () => {
         ))}
       </ul>
 
-      {/* Social icons */}
-      <div className="hidden lg:flex gap-3 items-center">
-        {socials.map((s) => (
-          <a
-            key={s.title}
-            href={s.href}
-            target={s.target}
-            title={s.title}
-            className={`${s.className} text-white w-8 h-8 flex items-center justify-center rounded-full text-[0.8rem] font-bold no-underline transition-transform hover:scale-110 hover:opacity-85`}
-          >
-            {s.label}
-          </a>
-        ))}
-      </div>
-      <div className="lg:hidden">
+      <div className="md:hidden">
         <button 
           onClick={toggleMenu}
-          className="lg:hidden nav-toggle" 
+          className="md:hidden nav-toggle" 
           aria-label='Toggle Menu'
           ref={buttonRef}
         >
