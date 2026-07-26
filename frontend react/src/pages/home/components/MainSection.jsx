@@ -47,7 +47,6 @@ export default function MainSection() {
                       <img 
                         loading='lazy' 
                         src={image} alt={title} 
-                        fetchPriority='high' 
                         decoding='async'
                         className="object-cover object-center size-full max-w-full"
                       />

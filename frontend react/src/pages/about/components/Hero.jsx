@@ -1,5 +1,3 @@
-import pokemon from "../../../assets/images/isagi2.webp";
-
 export default function Hero() {
   return (
     <>
@@ -24,10 +22,9 @@ export default function Hero() {
         <div className="relative shrink-0 w-70 max-w-100 h-full">
           <img 
           loading="eager" 
-          src={pokemon} 
-          alt="A Pokemon image" 
           fetchPriority="high" 
-          decoding="async"
+          src="/images/isagi2.webp"
+          alt="Me squizophrenic asf" 
           className="block w-full h-auto object-cover" />
         </div>
       </section>

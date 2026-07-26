@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
-import myPic from '../assets/images/pic2.webp'
 import useTypingEffect from '../hooks/useTypingEffect';
 
 const navLinks = [
@@ -40,15 +39,20 @@ return () => {
 };
 }, []);
 
-const titles = ["Full-Stack Junior", "Ciego En Potencia", "Autista", "React Developer",]
+const titles = ["Full-Stack Junior", "Ciego En Potencia", "Experto en Vibe Codear analmente", "React Developer",]
 const typedText = useTypingEffect(titles, 80, 50, 1500);
 
   return (  
     <nav className="bg-white h-17.5 flex items-center justify-between lg:justify-around px-[5%] sticky top-0 z-50 shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
       
       {/* Logo */}
-      <a href="/home" className="inline-flex w-2xs items-center gap-2 font-semibold text-[1.4rem] text-[#1a1a2e] no-underline">
-        <img src={myPic} alt="My face" className="w-auto h-[2.5em] border-2 rounded-sm object-contain" />
+      <a href="/home" className="inline-flex w-80 items-center gap-4 font-semibold text-[1.4rem] text-[#1a1a2e] no-underline">
+        <img 
+        loading='eager'
+        fetchPriority='high'
+        src="/pic2.webp"
+        alt="My face" 
+        className="w-auto h-[2.5em] border-2 border-blue-500 rounded-sm object-contain" />
         <div className="flex flex-col">  
           <p className="text-xl inset-0 no-underline">Tato <span className="text-blue-500 font-bold">CSV</span></p>
           <p className="text-[.600em] leading-relaxed after:content-['|'] after:animate-ping">

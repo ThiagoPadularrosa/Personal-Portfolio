@@ -1,6 +1,3 @@
-import banner2 from '../../../assets/images/banner2.webp'
-
-
 export default function Hero() {
   return (
     <section className="flex w-full h-[90vh] relative overflow-hidden text-[#f5f5f5] p-[0_20px]">
@@ -11,7 +8,12 @@ export default function Hero() {
       </h1>
 
       <div className="contents justify-center items-center w-full h-[70vh] bg-transparent relative shrink-0 z-0">
-        <img src={banner2} alt="A simple banner" className="absolute top-0 left-0 w-full h-full object-cover aspect-video z-0" />
+        <img 
+        loading='eager'
+        fetchPriority='high'
+        src="/images/banner2.webp" 
+        alt="A simple banner" 
+        className="absolute top-0 left-0 w-full h-full object-cover aspect-video z-0" />
       </div>
     </section>
   )
