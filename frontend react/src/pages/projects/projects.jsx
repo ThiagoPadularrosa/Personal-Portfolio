@@ -5,7 +5,7 @@ import './projects.css'
 
 export default function ProjectsPage() {
   return (
-    <div className="min-h-screen bg-[#e8edf2] overflow-X-hidden mb-1.5">
+    <div className="min-h-screen bg-[#e8edf2] overflow-X-hidden mb-6">
       <Hero />
       <Projects />
     </div>

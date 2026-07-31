@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
     <>
-      <section className="bg-white min-h-85 flex flex-col justify-between px-[5%] py-16 gap-8 animate-fade-in md:flex-row md:justify-around">
+      <section className="bg-white min-h-85 flex flex-col justify-between px-[5%] py-16 gap-8 animate-fade-in md:flex-row ">
         <div className="max-w-140 size-fit">
           <h1 className="font-bold text-5xl text-black mb-3 font-courier md:text-6xl">About Me</h1>
           <p className="text-wrap whitespace-pre-line text-black">
@@ -19,7 +19,7 @@ export default function Hero() {
             Purus est efficitur laoreet mauris pharetra vestibulum fusce.
           </p>
         </div>
-        <div className="relative shrink-0 w-70 max-w-100 h-full">
+        <div className="relative bg-[#edf2f7] shrink-0 w-70 max-w-100 h-full lg:w-80">
           <img 
           loading="eager" 
           fetchPriority="high" 

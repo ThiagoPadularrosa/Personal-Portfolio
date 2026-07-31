@@ -19,8 +19,10 @@ export default function FormContact() {
       <form onSubmit={handleSubmit} action={"http://localhost:4000/api/data"} method='POST' className='block size-fit' noValidate >
         <div className="flex flex-col items-baseline lg:pl-12">
           <div className="flex flex-col max-w-171.25 py-4 px-0 gap-3">
-            <h3 className='font-courier w-fit text-5xl text-left lg:text-7xl'>Contact Me</h3>
-            <p className='text-2xl lg:text-2xl font-medium text-[#0d0d0d] text-left'>
+            <h3 className='font-courier text-[#1a1a2e] font-bold w-fit text-[2.5rem] text-left lg:text-7xl'>
+              Contact Me
+            </h3>
+            <p className='text-2xl text-left lg:text-2xl font-medium text-[#0d0d0d]'>
               If you want to hire me, ask some questions, or need my help,
               send me a message — I'm here to help.
             </p>
@@ -34,7 +36,7 @@ export default function FormContact() {
  
           {/* TEXTBOXES */}
           <div className='flex flex-col'>
-              <div className=" md:max-w-171.25">
+              <div className="w-full md:max-w-171.25">
                 <label htmlFor="username" className='font-bold'>First Name</label>
                 <input
                   type="text"
@@ -101,7 +103,7 @@ export default function FormContact() {
                 </p>
               </div>
               <div className="size-fit mb-6 mt-8">
-                <label htmlFor="checkbox" className="flex flex-row items-center text-[1rem] gap-2">
+                <label htmlFor="checkbox" className="flex! flex-row! items-center! text-[1rem] gap-2!">
                   <input
                     type="checkbox"
                     id="checkbox"

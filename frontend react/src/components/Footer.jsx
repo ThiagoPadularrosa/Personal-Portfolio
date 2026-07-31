@@ -15,28 +15,30 @@ const socials = [
   return (
 <>
   <hr className="text-[#0d0d0d] m-auto bg-[#f1f5f8]"/>
-  <div className="pt-2 pl-8 pr-8">
+  <div className="pt-2 px-8">
     <footer className="min-[320px]:max-md:flex min-[320px]:max-md:flex-col min-[320px]:max-sm:items-center flex bg-white lg:flex md:justify-between">
       <a href="/home" className="font-semibold text-[2rem] text-[#1a1a3a] no-underline max-lg:mb-6">
         Tato <span className="text-blue-500">CSV</span>
       </a>
       <nav className="sm:flex m-0 p-0 text-[3.5rem]">
         {/* Social icons */}
-        <div className=" min-[320px]:flex gap-4 items-center">
+        <div className=" min-[320px]:flex gap-3 items-center">
           {socials.map((s) => (
             <a
               key={s.title}
               href={s.href}
               target={s.target}
               title={s.title}
-              className={`${s.className} text-white w-8 h-8 min-[320px]:max-md:m-1 flex items-center justify-center rounded-full text-[0.8rem] font-bold no-underline transition-transform hover:scale-110 hover:opacity-85`}
+              className={`${s.className} text-white w-9 h-9 flex items-center justify-center rounded-full text-[0.8rem] font-bold no-underline transition-transform hover:scale-110 hover:opacity-85`}
             >
               {s.label}
             </a>
           ))}
         </div>
       </nav>
-      <p className="items-center pb-4 mt-5 text-[#1a1a3a] text-[0.8rem] md:text-[0.9rem]">&copy; 2026 My Portfolio. All rights reserved.</p>
+      <p className="items-center pb-4 mt-5 text-[#1a1a3a] text-[0.8rem] md:text-[0.9rem]">
+        &copy; 2026 My Portfolio. All rights reserved.
+      </p>
     </footer>
     </div>
     </>

@@ -3,8 +3,6 @@ import data from '../../../assets/images/data.webp'
 import torres from '../../../assets/images/torres.webp'
 import ScrollReveal from '../../../components/ScrollReveal'
 
-
-
 const cardsSkills = [
   {
     title: "Web Development",
@@ -27,7 +25,7 @@ export default function MainSection() {
   return (
     <ScrollReveal>
       <div className="py-4">
-        <main className="flex flex-col flex-1 w-full overflow-hidden gap-y-12 max-w-7xl m-auto mx-auto p-4">
+        <main className="flex flex-col flex-1 w-full overflow-hidden gap-y-12 mx-auto py-2">
           <section className="bg-[#edf2f7] px-[3%] py-16">
             <div className="max-w-6xl mx-auto size-fit">
               <div className="text-center mb-10">
