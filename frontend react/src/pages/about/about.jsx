@@ -1,14 +1,13 @@
 import Hero from "./components/Hero";
-import SkillsSection from "./components/SkillsSection";
+import Experiences from "./components/Experiences"
 import ErrorBoundary from "../../components/ErrorBoundary"
-import "./about.css";
 
 export default function About() {
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden mb-6">
       <Hero />
       <ErrorBoundary>
-        <SkillsSection />
+        <Experiences />
       </ErrorBoundary>
     </div>
   );
