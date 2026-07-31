@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 import DashboardLayout from '../components/DashboardLayout.jsx';
 import Home from '../pages/home/home.jsx';
 import About from '../pages/about/about.jsx';

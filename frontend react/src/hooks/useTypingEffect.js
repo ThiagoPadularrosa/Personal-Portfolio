@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function useTypingEffect(wordsArray, typeSpeed = 80, eraseSpeed = 50, delayBetween = 1500) {
+export default function useTypingEffect(wordsArray, typeSpeed = 70, eraseSpeed = 40, delayBetween = 1500) {
   const [displayedText, setDisplayedText] = useState("");
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);

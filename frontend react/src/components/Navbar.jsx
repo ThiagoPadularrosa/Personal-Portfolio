@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';  
+import { Link } from 'react-router';  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
@@ -40,22 +40,27 @@ return () => {
 }, []);
 
 const titles = ["Full-Stack Junior", "Ciego En Potencia", "Experto en Vibe Codear analmente", "React Developer",]
-const typedText = useTypingEffect(titles, 80, 50, 1500);
+const typedText = useTypingEffect(titles, 70, 40, 1500);
 
   return (  
-    <nav className="bg-white h-17.5 flex items-center justify-between lg:justify-around px-[5%] sticky top-0 z-50 shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
+    <nav className="bg-white h-22 flex items-center justify-between lg:justify-around px-[3%] sticky top-0 z-50 shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
       
-      {/* Logo */}
-      <a href="/home" className="inline-flex w-80 items-center gap-4 font-semibold text-[1.4rem] text-[#1a1a2e] no-underline">
+      {/* Logo and Title */}
+      <a href="/home" className="flex w-62 h-20 items-start gap-4 font-semibold text-[1.4rem] text-[#1a1a2e] no-underline lg:w-90">
         <img 
-        loading='eager'
-        fetchPriority='high'
-        src="/pic2.webp"
-        alt="My face" 
-        className="w-auto h-[2.5em] border-2 border-blue-500 rounded-sm object-contain" />
-        <div className="flex flex-col">  
-          <p className="text-xl inset-0 no-underline">Tato <span className="text-blue-500 font-bold">CSV</span></p>
-          <p className="text-[.600em] leading-relaxed after:content-['|'] after:animate-ping">
+          loading='eager'
+          fetchPriority='high'
+          src="/pic2.webp"
+          alt="My face" 
+          className="w-auto h-[2.5em] mt-3 border-2 border-blue-500 rounded-sm object-contain"
+        />
+        
+        <div className="flex flex-col mt-3 relative leading-4">  
+          <p className="text-xl no-underline">
+            Tato <span className="text-blue-500 font-bold">CSV</span>
+          </p>
+          <p className="text-[.650em] leading-relaxed wrap-break-word break-all after:content-['|'] after:animate-ping">
+            <span className="absolute inset-0"></span>
             {typedText}
           </p>
         </div>
@@ -67,7 +72,7 @@ const typedText = useTypingEffect(titles, 80, 50, 1500);
           <li key={link.title}>
             <Link
               to={link.to}
-              className="no-underline text-[#2d3748] font-medium text-[0.95rem] transition-colors hover:text-[#4a9eff]"
+              className="no-underline text-[#2d3748] font-semibold text-lg transition-colors hover:text-[#4a9eff]"
             >
               {link.label}
             </Link>
@@ -95,10 +100,10 @@ const typedText = useTypingEffect(titles, 80, 50, 1500);
         ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
         `}
         ref={menuRef}>
-          <li><a href="/home" onClick={toggleMenu} className='hover:text-blue-400 block text-lg'>Home</a></li>
-          <li><a href="/about" onClick={toggleMenu} className='hover:text-blue-400 block text-lg'>About</a></li>
-          <li><a href="/projects" onClick={toggleMenu} className='hover:text-blue-400 block text-lg'>Portfolio</a></li>
-          <li><a href="/contact" onClick={toggleMenu} className='hover:text-blue-400 block text-lg'>Contact</a></li>
+          <li><a href="/home" onClick={toggleMenu} className='hover:text-blue-400 block font-semibold text-lg'>Home</a></li>
+          <li><a href="/about" onClick={toggleMenu} className='hover:text-blue-400 block font-semibold text-lg'>About</a></li>
+          <li><a href="/projects" onClick={toggleMenu} className='hover:text-blue-400 block font-semibold text-lg'>Portfolio</a></li>
+          <li><a href="/contact" onClick={toggleMenu} className='hover:text-blue-400 block font-semibold text-lg'>Contact</a></li>
         </ul>
       </div>
     </nav>
