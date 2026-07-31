@@ -16,7 +16,7 @@ app.port = config.PORT;
 
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
-connectDB()
+connectDB(); // To establish a consistent connection between Node.js app and my database (MongoDB)
 
 const allowedOrigins = [
   'http://localhost:5500',
