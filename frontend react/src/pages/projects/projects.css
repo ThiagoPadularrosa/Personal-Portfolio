@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
-@import "tailwindcss";
-
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     font-family: 'DM Sans', sans-serif;
-  } 
+  }
+}
 
 @layer utilities {
-  .font-courier { font-family: 'Courier Prime', monospace; }
   
   /* dot grid for hero illustration */
   .dot-grid::before {
@@ -30,14 +30,3 @@
     box-shadow: 6px 6px 0 rgba(255, 200, 0, 0.7);
   }
 }
-
-/* Animations */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-up          { animation: fadeUp 0.6s ease both; }
-.animate-fade-up-delay    { animation: fadeUp 0.6s 0.15s ease both; }
-.animate-fade-up-delay-1  { animation: fadeUp 0.5s 0.00s ease both; }
-.animate-fade-up-delay-2  { animation: fadeUp 0.5s 0.08s ease both; }
-.animate-fade-up-delay-3  { animation: fadeUp 0.5s 0.16s ease both; }

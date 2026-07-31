@@ -13,12 +13,3 @@
 
     box-shadow: inset 0 0 0.6px #0000007a, 0 0 0 .125rem  #0000001a;
 }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.animate-fade-in        { animation: fadeIn 1s ease-in-out; }
-.animate-fade-in-delay  { animation: fadeIn 1s 0.5s ease-in-out; }
-.animate-fade-in-delay2 { animation: fadeIn 1s 1s ease-in-out; }
-.animate-fade-in-delay3 { animation: fadeIn 1s 1.5s ease-in-out; }
-.animate-fade-in-delay4 { animation: fadeIn 1s 2s ease-in-out; }

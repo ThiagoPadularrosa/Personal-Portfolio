@@ -1,17 +1,7 @@
-:root {
-  --primary-color: #389fff;
-  --secondary-color: #f1f5f8;
-  --text-color: #0d0d0d;
-  --secondary-text-color: #f5f5f5;
-  --primary-checkbox-color: #555dff;
-  --primary-background-color: #fff;
-
-}
-
 /* REEMPLAZO BODY */
 .contact-page {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 24px;
   background-color: #f1f5f8;
   line-height: 1.75rem;
   font-family: 'DM Sans', sans-serif;
@@ -45,7 +35,7 @@
   .form-links:hover { color: #0000007a; }
   .form-links:hover { opacity: .65; }
 
-  /* BTN FORM */
+  /* PRIMARY BTN SEND FORM */
   .form-btn {
     position: relative;
     font-family: 'Montserrat', sans-serif;
@@ -60,7 +50,7 @@
     border: none;
 		display: flex; justify-content: left; align-items: left;
     padding: 0.65rem 1.25rem; 
-    margin-top: 2rem; 
+    margin-top: 1.5rem; 
     bottom: 4rem;
     transform: translateY(100%);
     transition: background-color 0.3s ease-in-out;
@@ -78,7 +68,7 @@
     transition: border 0.5s ease-in-out;
     border: 2px solid transparent;
     padding: 5px;
-    transform: translate(-70%, -50%);
+    transform: translate(-85%, -50%);
   }
   .nav-toggle::after {
     content: "";
@@ -147,7 +137,7 @@
     font-size: 1rem;
     height: 15rem;
     border-radius: 10px;
-    padding-top: 10px; padding-left: 10px;
+    padding-top: 10px; padding-left: 10px; padding-right: 10px;
   }
   .contact-page textarea::placeholder { color: rgba(255, 255, 255, 0.642); text-align: left; font-size: 1rem; font-weight: 400; }
   .contact-page textarea:user-invalid::selection { background-color: #cc000080; }
@@ -213,17 +203,6 @@
     display: block;
     width: 100%;
     height: 100dvh;
-
     background-color: transparent;
   }
 }
-@layer utilities {
-  .font-dmsans { font-family: 'DM Sans', monospace; }
-}
-
-@keyframes progress {
-  to {
-    transform: scale(1);
-  }
-}
- 
