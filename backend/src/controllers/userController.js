@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 import User from '../models/userModel.js'
 import asyncHandler from "../utils/asyncHandler.js";
 import contactFormSchema from "../Validations/schemas.js";
-import { sendEmail } from "../config/email.config.js";
+import { sendEmail } from "../services/email.service.js";
 
 // CRUD code for the HTTP requests -- Create User
 // AsyncHandler only catches unhandled promise rejections from my Express route
 export const postUsers = asyncHandler (async (req, res) => {
   const result = contactFormSchema.safeParse(req.body);
-  const { email, name, message } = req.body;
+  const { username, lastname, email, message } = req.body;
 
   // Database logic
     if (!result.success) {
@@ -24,10 +24,16 @@ export const postUsers = asyncHandler (async (req, res) => {
     
     // Attempting the email send
     await sendEmail ({       
-      to: 'padularrosathiago@gmail.com',
-      subject: `New message from ${name}`,
+      to: 'padularrosathiago26@gmail.com',
+      subject: `New message from ${username}`,
       text: `From: ${email}\n\nMessage: ${message}`,
-      html: `<p><strong>From:</strong> ${email}</p><p>${message}</p>`,
+      html: `
+        <h2>New Message</h2>
+        <p><strong>Username: ${username}</strong></p>
+        <p><strong>Lastname: ${lastname}</strong></p>
+        <p><strong>From:</strong> ${email}</p>
+        <p>${message}</p>
+      `,
     });
     console.log('Email sent successfully');
   } catch (error) {

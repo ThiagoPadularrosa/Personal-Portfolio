@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import { lowercase, maxLength, minLength } from "zod";
+import sanitizeHtml from 'sanitize-html';
 
+// Escaping means (as a last resort) to prevent any malicious code from being executed in the database. This is a security measure to prevent any malicious code from being executed in the database.
+
+// Escaping all the inputs before saving them to the database.
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -22,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    // unique: true, // Mongoose automatically creates an index for this
+    unique: true, // Mongoose automatically creates an index for this
     lowercase: true,
     minLength: 2,
     match: [/@gmail\.com$/i, 'The email should finish with @gmail.com']
@@ -33,6 +37,11 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minLength: 10,
     maxLength: 500,
+    set: (val) => sanitizeHtml(val, {
+      allowedTags: ['b', 'i', 'u', 'em', 'strong', 'a',], // Allowed tags for sanitization in the message
+      allowedAttributes: {
+        'a': ['href', 'target'] // This only allowed the href and target attributes  
+    }}),
   },
   checkbox: {
     type: Boolean,
