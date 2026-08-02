@@ -11,7 +11,7 @@ Here is all my projects organized in a single website where you can see all my c
 ## Tech Stack
 
 - **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Node.js, ExpressJs
+- **Backend:** Node.js, ExpressJs, Nodemailer and ReSend
 - **Database:** MongoDB (NoSQL)
 
 ## Installation
