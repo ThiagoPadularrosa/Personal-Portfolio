@@ -1,17 +1,16 @@
-import dotenv from 'dotenv';
-dotenv.config()
-
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dns from 'dns';  
 import morgan from 'morgan';
+import helmet from "helmet";
 import config from './src/config/config.js';
 
 import errorHandler from './src/middlewares/errorHandler.js';
 import { verifyConnection } from './src/config/email.config.js';
 import router from './src/Routes/userRoutes.js';
 import connectDB from './src/db/connection.js';
+import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 const app = express();
 app.port = config.PORT;
 
@@ -24,7 +23,7 @@ const allowedOrigins = [
   'http://localhost:5500',
   'http://localhost:4000',
   'http://localhost:5173',
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
   // In production mode i have to add my real domain to allow it
 ];
 
@@ -44,12 +43,36 @@ const corsOptions = {
 	credentials: true, // Allow cookies/Auth tokens
 	optionsSuccessStatus: 200 // Legacy browser support
 };
+
+const isDevelopment = app.get("env") === "development";
+
+app.use(helmet({
+    frameguard: { action: 'deny' }, // Sets X-Frame-Options to SAMEORIGIN by default
+    contentSecurityPolicy: {
+      directives: {
+        // Fallback directive for unmapped resource categories
+        defaultSrc: ["'self'"],
+        // This is to allow scripts from my site (and maybe) or other external domain
+        scriptSrc: ["'self'",],
+        // This is to allow styles from my site (and maybe) or other external domain
+        styleSrc: ["'self'",],
+        // This is to allow imgs from my site, data URIs, and specific domains
+        imgSrc: ["'self'", "data:",],
+        // This is to allow connections (AJAX, WebSockets) to others specific domains
+        connectSrc: ["'self'",],
+        "upgrade-insecure-requests": isDevelopment ? null : [],
+      },
+    },
+  }),
+);  
 // APP.USE works to register middlewares and routes. The order is very important.
 // Middlewares
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); 
+
+app.use(rateLimiterMiddleware);
 
 // Routes and error handler
 app.use('/api', router);
