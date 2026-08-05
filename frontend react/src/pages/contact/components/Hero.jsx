@@ -11,7 +11,7 @@ export default function Hero() {
         <img 
         loading='eager'
         fetchPriority='high'
-        src="/images/banner2.webp" 
+        src="/images/simple.webp" 
         alt="A simple banner" 
         className="absolute top-0 left-0 w-full h-full object-cover aspect-video z-0" />
       </div>
