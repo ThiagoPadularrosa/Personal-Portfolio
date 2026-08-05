@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import User from '../models/userModel.js'
 import asyncHandler from "../utils/asyncHandler.js";
-import contactFormSchema from "../Validations/schemas.js";
+import contactFormSchema from "../Validators/schemas.js";
 import { sendEmail } from "../services/email.service.js";
 
 // CRUD code for the HTTP requests -- Create User

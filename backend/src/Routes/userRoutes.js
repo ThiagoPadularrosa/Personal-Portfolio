@@ -4,7 +4,7 @@ import { getUsers, getUserById, postUsers, patchUpdateById, deleteUserById } fro
 const router = express.Router();
 
 // CRUD HTTP REQUESTS 
-router.post('/data', postUsers);  
+router.post('/data', postUsers);
 router.get('/', getUsers);
 router.get('/:id', getUserById);
 router.patch('/:id', patchUpdateById);

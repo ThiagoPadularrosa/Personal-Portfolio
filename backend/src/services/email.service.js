@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config()
-
 import nodemailer from 'nodemailer';
 import transporter from '../config/email.config.js';
 import config from '../config/config.js';
@@ -10,7 +7,7 @@ export async function sendEmail({ to, subject, text, html }) {
   try {
     // This is the message with the email content and headers 
     const mailOptions = {
-      from: process.env.EMAIL_FROM,
+      from: config.EMAIL_FROM,
       to,
       subject,
       text,

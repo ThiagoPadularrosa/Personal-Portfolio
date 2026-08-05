@@ -41,7 +41,10 @@ const userSchema = new mongoose.Schema({
       allowedTags: ['b', 'i', 'u', 'em', 'strong', 'a',], // Allowed tags for sanitization in the message
       allowedAttributes: {
         'a': ['href', 'target'] // This only allowed the href and target attributes  
-    }}),
+    },
+    allowedSchemes: ['http', 'https', 'mailto'], // Allowed schemes for the 'a' tag in the message
+    allowedIframeHostnames: ["www.youtube.com"], // Allowed hostnames for the 'iframe' tag in the message
+  }),
   },
   checkbox: {
     type: Boolean,
