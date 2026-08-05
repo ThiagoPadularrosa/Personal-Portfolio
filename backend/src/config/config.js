@@ -12,7 +12,5 @@ export const variables = {
   SMTP_USER: process.env.SMTP_USER || 'resend',
   EMAIL_FROM: process.env.EMAIL_FROM || 'onboarding@resend.dev',
   RESEND_API_KEY: process.env.RESEND_API_KEY,
-  // REDIS CREDENTIALS
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
 }
 export default variables;
