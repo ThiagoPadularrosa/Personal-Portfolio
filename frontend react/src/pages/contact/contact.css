@@ -190,9 +190,11 @@
   .contact-page input:-webkit-autofill:hover,
   .contact-page input:-webkit-autofill:focus,
   .contact-page input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
-    -webkit-text-fill-color: #333;
+    caret-color: white;
+    -webkit-box-shadow: 0 0 0px 30px #282828 inset;
+    -webkit-text-fill-color: white !important;
     box-shadow: 0 0 0 1000px transparent inset;
+    transition: background-color 9999s ease-in-out 0s !important;
     outline: none;
   }
   .contact-page input:-webkit-autofill:focus-visible {
