@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useContactForm } from '../../../hooks/useContactForm';
-
 import clsx from 'clsx';
 import Notification from '../../../components/Notification';
+import useFrontendValidation from '../../../hooks/useFrontendValidation';
 
 export default function FormContact() {
+
   const { 
     formData,
     notification,
@@ -12,7 +12,7 @@ export default function FormContact() {
     errors,
     hasError,
     handleInputChange,
-    handleSubmit, } = useContactForm();
+    handleSubmit, } =  useFrontendValidation();
 
   return (
     <>
@@ -65,8 +65,8 @@ export default function FormContact() {
               </div>
               <div className="pt-4 md:max-w-171.25">
                 <label htmlFor="useremail" className='font-bold'>Your email address
-                <span className='font-normal!'> (so i can reply to you)</span>
-                {error && <span className='text-[red] text-[1.2rem]'> {error}</span>}
+                  <span className='font-normal!'> (so i can reply to you)</span>
+                  {error && <span className='text-[red] text-[1.2rem]'> {error}</span>}
                 </label>
                 <input
                   type="email"
@@ -116,6 +116,7 @@ export default function FormContact() {
                 </label>
               </div>
               <button type='submit' id='submit-btn' className='form-btn hover:bg-pink-700 hover:opacity-100'>Send</button>
+              {/* Rendering Notification messages */}
               <Notification notification={notification} />
           </div>
         </div>

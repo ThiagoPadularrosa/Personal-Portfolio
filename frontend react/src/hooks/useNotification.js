@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function useNotification() {
+  const [notification, setNotification] = useState({
+      status: 'idle',   // 'idle' | 'loading' | 'success' | 'error'
+      message: '',      // Global notification message
+      isVisible: false
+    });
   
-  const [notification, setNotification] = useState({ message: '', type: '', visible: false });
+    const showNotification = (status= 'success' , message, duration= 3000) => {
+      setNotification({ 
+        status,
+        message, 
+        isVisible: true
+       });
+      
+      setTimeout(() => {
+        setNotification({ status: 'idle', message: '', isVisible: false });
+      }, 5350);
+    };
 
-  const showNotification = (message, type = 'success', duration= 3000) => {
-    setNotification({ message, type, visible: true });
-
-    setTimeout(() => {
-      setNotification({ message: '', type: '', visible: false });
-    }, 5350);
-  };
-  
-  return { notification, showNotification };
+    return { notification, showNotification };
 }
