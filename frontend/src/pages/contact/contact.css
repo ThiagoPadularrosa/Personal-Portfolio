@@ -1,0 +1,210 @@
+/* REEMPLAZO BODY */
+.contact-page {
+  display: block;
+  margin-bottom: 24px;
+  background-color: #f1f5f8;
+  line-height: 1.75rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* MAIN CONTENT */
+.contact-background {
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.6em;
+    align-items: center;
+    font-weight: bold;
+    color: #0d0d0d;
+    text-align: left;
+    font-family: 'Ubuntu', sans-serif;
+    margin-top: 1rem;
+
+    background-color: #fffffff0;
+    padding: 0.35rem 1rem;
+    border-radius: 1rem;
+
+    box-shadow: inset 0 0 0.6px #0000007a, 0 0 0 .125rem  #0000001a;
+}
+@layer components {
+  .form-links {
+  color: #0d0d0d;
+  text-decoration-line: underline; text-underline-offset: .25em;
+  text-decoration-thickness: 15%; text-decoration-color: #4141417a;
+  text-decoration-style: none;
+}
+  .form-links:hover { color: #0000007a; }
+  .form-links:hover { opacity: .65; }
+
+  /* PRIMARY BTN SEND FORM */
+  .form-btn {
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f5f5f5;
+    background-color: #151515;
+    width: fit-content;
+    cursor: pointer;
+    border-radius: 1rem;
+    line-height: 1.50rem;
+    border: none;
+		display: flex; justify-content: left; align-items: left;
+    padding: 0.65rem 1.25rem; 
+    margin-top: 1.5rem; 
+    bottom: 4rem;
+    transform: translateY(100%);
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  /* HAMBURGUER MENU */
+
+  .nav-toggle {
+    position: fixed;
+    outline: none;
+    background-color: transparent;
+    font-size: 1.7rem;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(146, 33, 33, 0);
+    transition: border 0.5s ease-in-out;
+    border: 2px solid transparent;
+    padding: 5px;
+    transform: translate(-85%, -50%);
+  }
+  .nav-toggle::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -53%);
+    width: 2.5rem; height: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 1);
+    opacity: 0;
+    transition: 0.5s ease;
+  }
+  .nav-toggle:focus::after {
+    opacity: 1;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.6);
+  }
+
+  /* Labels/Inputs/Textarea styles */
+  .input-invalid {
+  box-shadow: inset 0 0 0.6px #0000001a, 0 0 0 .125rem #c00 !important;
+}
+  .contact-page label {
+    display: block;
+    width: fit-content;
+    color: #212123;
+    font-size: .875rem;
+    font-weight: 500;
+}
+  .contact-page input[type="text"],
+  .contact-page input[type="email"] {
+    outline: none;
+    border: 1px solid transparent;
+    font-size: 1rem;
+    font-family: 'Ubuntu', sans-serif; 
+    align-items: center;   
+    text-align: left;
+    min-height: 3rem;
+    border-radius: 16px;
+    padding-left: 10px;
+    box-shadow: 0 .0625rem .125rem #0000001a;
+    color: white;
+    background-color: #282828;
+    appearance: none;
+  }
+  .contact-page input::placeholder { color: rgba(255, 255, 255, 0.642); font-size: 1rem; }
+  .contact-page input:user-invalid::selection { background-color: #cc000080; }
+  .contact-page input:user-invalid::-moz-selection { background-color: #cc000080; }
+  .contact-page input[type="text"]:focus {
+    box-shadow: inset 0 0 0.6px #0000001a, 0 0 0 .125rem var(--primary-checkbox-color);
+  }
+  .contact-page input[type="email"]:focus {
+    box-shadow: inset 0 0 0.6px #0000001a, 0 0 0 .125rem var(--primary-checkbox-color);
+  }
+  .contact-page input:focus::selection { background-color: #555dff80; }
+  .contact-page input[type="text"],
+  .contact-page input[type="email"]:focus { outline: none; }
+
+  .contact-page textarea {
+    resize: none;
+    outline: none;
+    border: 1px solid transparent;
+    color: white;
+    background-color: #282828;
+    appearance: none;
+    font-family: 'Ubuntu', sans-serif; 
+    font-size: 1rem;
+    height: 15rem;
+    border-radius: 10px;
+    padding-top: 10px; padding-left: 10px; padding-right: 10px;
+  }
+  .contact-page textarea::placeholder { color: rgba(255, 255, 255, 0.642); text-align: left; font-size: 1rem; font-weight: 400; }
+  .contact-page textarea:user-invalid::selection { background-color: #cc000080; }
+  .contact-page textarea:user-invalid::-moz-selection { background-color: #cc000080; }
+  .contact-page textarea:focus { box-shadow: inset 0 0 0.6px #0000001a, 0 0 0 .125rem var(--primary-checkbox-color);}
+  .contact-page textarea:focus::selection { background-color: #555dff80; }
+
+  /* - CHECKBOX - */
+  .contact-page input[type="checkbox"] {
+    display: grid;
+    position: relative;
+    place-content: center;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-clip: padding-box;
+    height: 1em; width: 1em;
+    font: inherit; 
+    color: currentColor;
+    border: 0.15em solid currentColor;
+    border-radius: .1875em;
+    background-color: var(--primary-background-color); 
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 .0625em .125em #0000001a;
+
+    transition: background-color .120s ease-in;
+  }
+  .contact-page input[type="checkbox"]:checked {
+    background-color: var(--primary-checkbox-color);
+  }
+  .contact-page input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--primary-background-color);
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+  .contact-page input[type="checkbox"]:checked::before{ transform: scale(1); }
+  .contact-page input[type="checkbox"]:focus {
+    outline: max(2px, 0.15em) solid currentColor;
+    outline-offset: max(2px, 0.15em);
+  }
+  .contact-page input:-webkit-autofill,
+  .contact-page input:-webkit-autofill:hover,
+  .contact-page input:-webkit-autofill:focus,
+  .contact-page input:-webkit-autofill:active {
+    caret-color: white;
+    -webkit-box-shadow: 0 0 0px 30px #282828 inset;
+    -webkit-text-fill-color: white !important;
+    box-shadow: 0 0 0 1000px transparent inset;
+    transition: background-color 9999s ease-in-out 0s !important;
+    outline: none;
+  }
+  .contact-page input:-webkit-autofill:focus-visible {
+    box-shadow: inset 0 0 0.6px #0000001a, 0 0 0 .125rem var(--primary-checkbox-color);
+  }   
+
+  .contact-page section {
+    display: block;
+    width: 100%;
+    height: 100dvh;
+    background-color: transparent;
+  }
+}

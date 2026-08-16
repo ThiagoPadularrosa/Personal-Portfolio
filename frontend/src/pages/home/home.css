@@ -1,0 +1,15 @@
+.heroAddressAndDisponibility {
+    gap: 0.6em;
+    align-items: center;
+    font-weight: bold;
+    color: #0d0d0d;
+    text-align: left;
+    font-family: 'Ubuntu', sans-serif;
+    margin-top: 1rem;
+
+    background-color: #fffffff0;
+    padding: 0.35rem 1rem;
+    border-radius: 1rem;
+
+    box-shadow: inset 0 0 0.6px #0000007a, 0 0 0 .125rem  #0000001a;
+}
