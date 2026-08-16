@@ -1,0 +1,62 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services: 
+  backend-api-prod:
+    build:
+      context: ./backend
+      dockerfile: ./backend/docker/Dockerfile
+    env_file:
+      - ./backend/.env
+    ports:
+      - "4000:4000"
+
+  backend-api-dev:
+    build:
+      context: ../../backend
+      dockerfile: ./backend/docker/Dockerfile.dev
+    env_file:
+      - ./backend/.env
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    develop:
+      watch:
+        - path: ./src
+          target: /backend/src
+          action: sync
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+
+  react-frontend-prod:
+    build:
+      context: ./frontend react
+      dockerfile: ./frontend react/docker/Dockerfile
+    ports:
+      - "8080:8080"
+
+  react-frotend-dev:
+    build:
+      context: ./frontend react
+      dockerfile: ./frontend react/docker/Dockerfile.dev
+    ports:
+      - "5173:5173"
+    develop:
+      watch:
+        - path: ./frontend react
+          target: /frontend react/src
+          action: sync
+        - path: ./frontend react/package.json
+          action: rebuild
