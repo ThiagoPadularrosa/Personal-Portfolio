@@ -1,62 +1,86 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
-
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services: 
   backend-api-prod:
+    profiles:
+      - prod
     build:
       context: ./backend
-      dockerfile: ./backend/docker/Dockerfile
+      dockerfile: docker/Dockerfile
+      target: prod
     env_file:
       - ./backend/.env
     ports:
-      - "4000:4000"
+      - "8000:8000"
+    networks:
+      - app-network-dev 
 
   backend-api-dev:
+    profiles:
+      - dev
     build:
-      context: ../../backend
-      dockerfile: ./backend/docker/Dockerfile.dev
+      context: ./backend
+      dockerfile: docker/Dockerfile.dev
+      target: dev
     env_file:
       - ./backend/.env
     ports:
       - "4000:4000"
     volumes:
-      - ./backend:usr/src/app
+      - ./backend:/usr/src/app # This has to be the same path as the WORKDIR in the Dockerfile
       - /usr/src/app/node_modules
-    environment:
-      - NODE_ENV=development
     develop:
       watch:
-        - path: ./src
-          target: /backend/src
+        - path: ./backend/src
+          target: /usr/src/app/src # Target needs to be the route inside the container
           action: sync
           ignore:
             - node_modules/
         - action: rebuild
           path: ./package.json
+    networks:
+      - app-network-dev  
 
   react-frontend-prod:
+    profiles:
+      - prod
     build:
-      context: ./frontend react
-      dockerfile: ./frontend react/docker/Dockerfile
+      context: ./frontend
+      dockerfile: docker/Dockerfile
+      target: prod
+    env_file:
+      - ./frontend/.env
     ports:
       - "8080:8080"
+    networks:
+      - app-network-dev 
+    depends_on:
+      - backend-api-prod
 
   react-frotend-dev:
+    profiles:
+      - dev
     build:
-      context: ./frontend react
-      dockerfile: ./frontend react/docker/Dockerfile.dev
+      context: ./frontend
+      dockerfile: docker/Dockerfile.dev
+      target: dev
     ports:
       - "5173:5173"
+    volumes:
+      - ./frontend:/app # This has to be the same path as the WORKDIR in the Dockerfile
+      - /app/node_modules
+    env_file:
+      - ./frontend/.env
+    networks:
+      - app-network-dev 
+    depends_on:
+      - backend-api-dev # This forces backend to start first
     develop:
       watch:
-        - path: ./frontend react
-          target: /frontend react/src
+        - path: ./frontend/src
+          target: /app/src
           action: sync
-        - path: ./frontend react/package.json
-          action: rebuild
+        - path: ./frontend/package.json
+          action: rebuild     
+
+networks:
+  app-network-dev:
+    driver: bridge
