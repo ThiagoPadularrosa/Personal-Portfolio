@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import config from './config.js';
 
-console.log("Just to see if the credentials are working or im forgetting smth", !!config.PORT);
+// console.log("Just to see if the credentials are working or im forgetting smth", !!config.PORT);
 // Create a transporter using SMTP (CONFIGURATION TRANSPORTER)
 const transporter = nodemailer.createTransport({
   host: config.SMTP_HOST,

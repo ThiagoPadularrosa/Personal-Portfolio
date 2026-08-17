@@ -50,14 +50,15 @@ export const contactFormSchema = z.object({
     })
 });
 
-const result = contactFormSchema.parse({
-  username: "Thiago",
-  lastname: "Gonzales",
-  email: "example@gmail.com",
-  message: "<p>Hola<script>alert('hack')</script> <b>Mundo</b></p>",
-  checkbox: true
-})
+// This is just to see if the sanitization of the message works properly
+// const result = contactFormSchema.parse({
+//   username: "Thiago",
+//   lastname: "Gonzales",
+//   email: "example@gmail.com",
+//   message: "<p>Hola<script>alert('hack')</script> <b>Mundo</b></p>",
+//   checkbox: true
+// })
 
-console.log(result.message);
+// console.log(result.message);
 
 export default contactFormSchema;

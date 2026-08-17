@@ -31,7 +31,6 @@ const sdk = new NodeSDK({
     '@opentelemetry/instrumentation-http': { enabled: true },
   })],
 });
-
 sdk.start(); // This run opentelemetry SKD before everything else
 
 process.on('SIGTERM', async () => {

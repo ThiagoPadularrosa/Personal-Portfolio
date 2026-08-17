@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { getUsers, getUserById, postUsers, patchUpdateById, deleteUserById } from '../controllers/userController.js';
 const router = express.Router();
 
-// CRUD HTTP REQUESTS 
+// CRUD HTTP REQUESTS ENDPOINTS
 router.post('/data', postUsers);
 router.get('/', getUsers);
 router.get('/:id', getUserById);
