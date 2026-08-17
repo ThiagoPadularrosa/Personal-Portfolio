@@ -1,27 +1,40 @@
 import mongoose from "mongoose";
-import User from '../models/userModel.js'
+import User from '../models/userModel.js';
 import asyncHandler from "../utils/asyncHandler.js";
-import contactFormSchema from "../Validators/schemas.js";
+import contactSchema from "../Validators/schemas.js";
 import { sendEmail } from "../services/email.service.js";
+import config from '../config/config.js'; 
+import { trace } from '@opentelemetry/api';
+import { success } from "zod";
 
-// CRUD code for the HTTP requests -- Create User
 // AsyncHandler only catches unhandled promise rejections from my Express route
 export const postUsers = asyncHandler (async (req, res) => {
-  const result = contactFormSchema.safeParse(req.body);
-  const { username, lastname, email, message } = req.body;
+  const result = contactSchema.safeParse(req.body);
+  const span = trace.getActiveSpan();
+  const tracer = trace.getTracer('express-internal-operations', '1.0.0');
+
+  span?.setAttribute('api.version', 'v1');  
 
   // Database logic
     if (!result.success) {
+    span?.setAttribute('form.validation', 'failed');
     console.log('Failed to received the data:', result.error.issues);
     return res.status(400).json({ errors: result.error.issues });
   }
 
+  const { username, lastname, email, message, checkbox } = result.data;
+  span?.setAttribute('form.validation', 'passed');
+  
   try {
-    
     // Before using result.data i have to validate it first
     const user = await User.create(result.data);
-    if (!user) throw new Error(`User cannot be created.`); // Directly throw
-    
+    if (!user) {
+      throw new Error(`User cannot be created.`); // Directly throw
+    }
+
+    span?.setAttribute('db.operation', 'insert');
+    span?.setAttribute('db.success', true);
+
     // Attempting the email send
     await sendEmail ({       
       to: 'padularrosathiago26@gmail.com',
@@ -35,18 +48,32 @@ export const postUsers = asyncHandler (async (req, res) => {
         <p>${message}</p>
       `,
     });
-    console.log('Email sent successfully');
-  } catch (error) {
-    console.log('Failed to send the email.', error.message);
-  }
 
-  console.log('The data has been received successfully', result.data);
-  return res.status(201).json({ 
-    success: true,
-    message: 'Client data processed',
-    data: result.data
-   })
-      
+    if (config.NODE_ENV !== 'production') {
+      console.log('The data has been received successfully', result.data);
+    }
+    console.log(`Contact form submitted by ${username}`);
+
+    return res.status(201).json({ 
+      success: true,
+      message: 'Client data processed',
+    })    
+  } catch (error) {
+    span?.setAttribute('error', true);
+    span?.setAttribute('error.message', error.message);
+    span.recordException(error); // I track errors in this specific span
+    span.setStatus({ 
+      code: opentelemetry.SpanStatusCode.ERROR, 
+      message: 'Error', 
+    });
+    console.log('Failed to send the email.', error.message);
+    return res.status(500).json({ 
+      success: false,
+      message: 'Something went wrong, please try again.'
+    });
+  } finally {
+    span.end();
+  }
 });
 
 // READ ALL USERS
