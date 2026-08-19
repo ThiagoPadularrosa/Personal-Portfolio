@@ -8,6 +8,8 @@ services:
       target: prod
     env_file:
       - ./backend/.env
+    environment:
+      - OTEL_SERVICE_NAME=backend-api-prod
     ports:
       - "8000:8000"
     networks:
@@ -22,11 +24,16 @@ services:
       target: dev
     env_file:
       - ./backend/.env
+    environment:
+      - OTEL_SERVICE_NAME=backend-api-dev
     ports:
       - "4000:4000"
     volumes:
       - ./backend:/usr/src/app # This has to be the same path as the WORKDIR in the Dockerfile
       - /usr/src/app/node_modules
+    depends_on:
+      collector:
+        condition: service_started
     develop:
       watch:
         - path: ./backend/src
@@ -48,6 +55,8 @@ services:
       target: prod
     env_file:
       - ./frontend/.env
+    environment:
+      - OTEL_SERVICE_NAME=react-frontend-prod
     ports:
       - "8080:8080"
     networks:
@@ -69,10 +78,13 @@ services:
       - /app/node_modules
     env_file:
       - ./frontend/.env
+    environment:
+      - OTEL_SERVICE_NAME=react-frontend-dev
     networks:
       - app-network-dev 
     depends_on:
-      - backend-api-dev # This forces backend to start first
+      backend-api-dev:
+        condition: service_started
     develop:
       watch:
         - path: ./frontend/src
@@ -80,6 +92,23 @@ services:
           action: sync
         - path: ./frontend/package.json
           action: rebuild     
+  
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.157.0
+    volumes:
+      - ./otelcol.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 4318:4318
+    networks:
+      - app-network-dev
+
+  jaeger:
+    image: jaegertracing/jaeger:2.20.0
+    ports:
+      - 16686:16686
+      - 4317:4317
+    networks:
+      - app-network-dev
 
 networks:
   app-network-dev:
