@@ -1,8 +1,8 @@
 class TokenBucket {
   constructor(capacity, refillAmount, refillIntervalMs) {
-    this.capacity = capacity;               // Máximo de tokens permitidos
-    this.tokens = capacity;                 // Tokens actuales
-    this.refillAmount = refillAmount;       // Cuántos tokens se agregan por ciclo
+    this.capacity = capacity;                 // Máximo de tokens permitidos
+    this.tokens = capacity;                   // Tokens actuales
+    this.refillAmount = refillAmount;         // Cuántos tokens se agregan por ciclo
     this.refillIntervalMs = refillIntervalMs; // Cada cuántos milisegundos se agregan
     this.lastRefill = Date.now();
   }
