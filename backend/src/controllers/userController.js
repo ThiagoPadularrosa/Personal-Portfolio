@@ -4,14 +4,13 @@ import asyncHandler from "../utils/asyncHandler.js";
 import contactSchema from "../Validators/schemas.js";
 import { sendEmail } from "../services/email.service.js";
 import config from '../config/config.js'; 
-import { trace } from '@opentelemetry/api';
-import { success } from "zod";
+import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 // AsyncHandler only catches unhandled promise rejections from my Express route
 export const postUsers = asyncHandler (async (req, res) => {
   const result = contactSchema.safeParse(req.body);
+  const tracer = trace.getTracer('portfolio.business-logic', '1.0.0');
   const span = trace.getActiveSpan();
-  const tracer = trace.getTracer('express-internal-operations', '1.0.0');
 
   span?.setAttribute('api.version', 'v1');  
 
@@ -23,57 +22,72 @@ export const postUsers = asyncHandler (async (req, res) => {
   }
 
   const { username, lastname, email, message, checkbox } = result.data;
-  span?.setAttribute('form.validation', 'passed');
-  
-  try {
-    // Before using result.data i have to validate it first
-    const user = await User.create(result.data);
-    if (!user) {
-      throw new Error(`User cannot be created.`); // Directly throw
+
+  return tracer.startActiveSpan('process-contact-form', async (businessSpan) => {
+    try {
+      // Before using result.data i have to validate it first
+      const user = await User.create(result.data);
+      if (!user) {
+        throw new Error(`User cannot be created.`); // Directly throw
+      }
+
+      businessSpan.setAttribute('db.operation', 'insert');
+      businessSpan.setAttribute('db.success', true);
+      
+      await tracer.startActiveSpan('process-email-service', async (emailServiceSpan) => {
+      try {
+        // Attempting the email send
+        await sendEmail ({       
+          to: 'padularrosathiago26@gmail.com',
+          subject: `New message from ${username}`,
+          text: `From: ${email}\n\nMessage: ${message}`,
+          html: `
+            <h2>New Message</h2>
+            <p><strong>Username: ${username}</strong></p>
+            <p><strong>Lastname: ${lastname}</strong></p>
+            <p><strong>From:</strong> ${email}</p>
+            <p>${message}</p>
+          `,
+        });
+        emailServiceSpan.setAttribute('service.operation', 'send');  
+        emailServiceSpan.setAttribute('service.success', true);
+      } catch (error) {
+        emailServiceSpan.recordException(error);
+        emailServiceSpan.setStatus({
+          code: SpanStatusCode.ERROR,
+          message: error.message,
+        });
+
+        throw error
+      } finally {
+        emailServiceSpan.end();
+      }
+    });
+
+      if (config.NODE_ENV !== 'production') {
+        console.log('The data has been received successfully', result.data);
+      }
+      console.log(`Contact form submitted by ${username}`);
+
+      return res.status(201).json({ 
+        success: true,
+        message: 'Client data processed',
+      })    
+    } catch (error) {
+      businessSpan.recordException(error); // I track errors in this specific span
+      businessSpan.setStatus({ 
+        code: SpanStatusCode.ERROR, 
+        message: error.message, 
+      });
+      console.log('Failed to send the form.', error.message);
+      return res.status(500).json({ 
+        success: false,
+        message: 'Something went wrong, please try again.'
+      });
+    } finally {
+      businessSpan.end();
     }
-
-    span?.setAttribute('db.operation', 'insert');
-    span?.setAttribute('db.success', true);
-
-    // Attempting the email send
-    await sendEmail ({       
-      to: 'padularrosathiago26@gmail.com',
-      subject: `New message from ${username}`,
-      text: `From: ${email}\n\nMessage: ${message}`,
-      html: `
-        <h2>New Message</h2>
-        <p><strong>Username: ${username}</strong></p>
-        <p><strong>Lastname: ${lastname}</strong></p>
-        <p><strong>From:</strong> ${email}</p>
-        <p>${message}</p>
-      `,
-    });
-
-    if (config.NODE_ENV !== 'production') {
-      console.log('The data has been received successfully', result.data);
-    }
-    console.log(`Contact form submitted by ${username}`);
-
-    return res.status(201).json({ 
-      success: true,
-      message: 'Client data processed',
-    })    
-  } catch (error) {
-    span?.setAttribute('error', true);
-    span?.setAttribute('error.message', error.message);
-    span.recordException(error); // I track errors in this specific span
-    span.setStatus({ 
-      code: opentelemetry.SpanStatusCode.ERROR, 
-      message: 'Error', 
-    });
-    console.log('Failed to send the email.', error.message);
-    return res.status(500).json({ 
-      success: false,
-      message: 'Something went wrong, please try again.'
-    });
-  } finally {
-    span.end();
-  }
+  });
 });
 
 // READ ALL USERS
