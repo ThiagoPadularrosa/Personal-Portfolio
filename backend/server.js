@@ -13,7 +13,6 @@ import router from './src/Routes/userRoutes.js';
 import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
-import { trace } from '@opentelemetry/api';
 
 const app = express();
 app.port = config.PORT;

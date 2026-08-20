@@ -1,8 +1,7 @@
-/*instrumentation.mjs*/
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import {
@@ -15,10 +14,11 @@ import config from '../config/config.js';
 const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter,
   resource: resourceFromAttributes({
+    [ATTR_SERVICE_NAME]: config.OTEL_SERVICE_NAME,
     [ATTR_SERVICE_VERSION]: config.SERVICE_VERSION,
   }),
   metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPTraceExporter,
+    exporter: new OTLPMetricExporter,
     // Export metrics every 60seconds
     exportIntervalMillis: 60000,
   }),
@@ -39,13 +39,14 @@ const sdk = new NodeSDK({
       },
      },
     '@opentelemetry/instrumentation-express': { enabled: true },
+    '@opentelemetry/instrumentation-mongodb': { enabled: true },
+    '@opentelemetry/instrumentation-mongoose': { enabled: true },
     }),
   ],
 });
 sdk.start(); // This run opentelemetry SKD before everything else
 
 async function shutdown() {
-  // Try and catch replaced .then and .catch
   try {
     await sdk.shutdown(); // Shutting down sdk to prevent memory leaks and/or data loss
     console.log('SDK shut down successfully');
