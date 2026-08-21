@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import { getUsers, getUserById, postUsers, patchUpdateById, deleteUserById } from '../controllers/userController.js';
 const router = express.Router();
 

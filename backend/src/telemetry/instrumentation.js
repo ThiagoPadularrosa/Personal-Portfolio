@@ -10,7 +10,6 @@ import {
 } from '@opentelemetry/semantic-conventions';
 import config from '../config/config.js';
 
-
 const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter,
   resource: resourceFromAttributes({
