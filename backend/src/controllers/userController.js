@@ -11,15 +11,19 @@ export const postUsers = asyncHandler (async (req, res) => {
   const result = contactSchema.safeParse(req.body);
   const tracer = trace.getTracer('portfolio.business-logic', '1.0.0');
   const span = trace.getActiveSpan();
-
-  span?.setAttribute('api.version', 'v1');  
-
+  // Enriching the existed auto-instrumentation span
+  if (span) {
+    span.setAttribute('api.version', 'v1');
+    span.setAttribute('api.operation', 'contact-form-submitted');
+    span.setAttribute('api.feature', 'contact'); 
+  }
   // Database logic
-    if (!result.success) {
+  if (!result.success) {
     span?.setAttribute('form.validation', 'failed');
     console.log('Failed to received the data:', result.error.issues);
     return res.status(400).json({ errors: result.error.issues });
   }
+  span.setAttribute('form.validation', 'passed');
 
   const { username, lastname, email, message, checkbox } = result.data;
 
