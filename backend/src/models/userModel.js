@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true, // Mongoose automatically creates an index for this
+    // unique: true, // Mongoose automatically creates an index for this
     lowercase: true,
     minLength: 2,
     match: [/@gmail\.com$/i, 'The email should finish with @gmail.com']
