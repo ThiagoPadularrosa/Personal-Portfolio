@@ -53,8 +53,8 @@ export const postUsers = asyncHandler (async (req, res) => {
             <p>${message}</p>
           `,
         });
-        emailServiceSpan.setAttribute('service.operation', 'send');  
-        emailServiceSpan.setAttribute('service.success', true);
+        emailServiceSpan.setAttribute('email-service.operation', 'send');  
+        emailServiceSpan.setAttribute('email-service.success', true);
       } catch (error) {
         emailServiceSpan.recordException(error);
         emailServiceSpan.setStatus({
