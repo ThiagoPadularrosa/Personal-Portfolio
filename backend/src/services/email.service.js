@@ -1,13 +1,13 @@
 import nodemailer from 'nodemailer';
 import transporter from '../config/email.config.js';
 import config from '../config/config.js';
-import { trace } from '@opentelemetry/api';
+import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 // The execution function to send a message
 export async function sendEmail({ to, subject, text, html }) {
-  const tracer = trace.getTracer('portfolio-email.service');
+  const tracer = trace.getTracer('portfolio.email-service', '1.0.0');
 
-  return tracer.startActiveSpan('send-email', async (span) => {
+  return tracer.startActiveSpan('send-email', async (emailSpan) => {
     try {
       // This is the message with the email content and headers 
       const mailOptions = {
@@ -17,7 +17,7 @@ export async function sendEmail({ to, subject, text, html }) {
         text,
         html,
       };
-
+      
       // The callback. If this is omitted, sendMail return only a Promise.
       const info = await transporter.sendMail(mailOptions);
       console.log("Message sent: %s", info.messageId);
@@ -27,8 +27,17 @@ export async function sendEmail({ to, subject, text, html }) {
       } else if (!info.accepted || info.accepted.length === 0) {
         return console.warn("There are no recipients that accepted the message.");
       }
+
+      emailSpan.setAttribute('email-service.feature', 'send');
+      emailSpan.setAttribute('email-service.operation', 'send-email');
+      emailSpan.setAttribute('email-service.success', true);
       return info;
     } catch (error) {
+      emailSpan.recordException.error;
+      emailSpan.setStatus({ 
+        code: SpanStatusCode.ERROR,
+        message: error.message,
+      });
       // This checks for specific Nodemailer error codes
       switch(error.code) {
         case "ECONNECTION":
@@ -57,6 +66,10 @@ export async function sendEmail({ to, subject, text, html }) {
             break;
       }
       throw error; // This goes forward to my main app controller 
+    } finally {
+      emailSpan.end();
     }
+    
   });
 }
+export default mailOptions;
