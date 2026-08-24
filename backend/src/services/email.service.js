@@ -54,14 +54,6 @@ export async function sendEmail({ to, subject, text, html }) {
           console.error("Validation error: Invalid addresses.", error.message);
           console.error("Rejected emails list:", error.message || []);
           break;
-        case "EAUTH":
-          console.error("CRITICAL: SMTP Authentication failed. Alerting internal dev team...", error.message);
-          break;
-        
-        case "EENVELOPE":
-          console.error("Validation error: Invalid addresses.", error.message);
-          console.error("Rejected emails list:", error.message || []);
-          break;
 
           default:
             // The Fall back that runs when the main code (above) fails, to reading raw SMTP response codes if available
