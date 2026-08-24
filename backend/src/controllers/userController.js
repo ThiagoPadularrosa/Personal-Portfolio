@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import User from '../models/userModel.js';
 import asyncHandler from "../utils/asyncHandler.js";
 import contactSchema from "../Validators/schemas.js";
-import { sendEmail } from "../services/email.service.js";
 import config from '../config/config.js'; 
+import emailSendUser from "../services/emailSendUser.js";
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 // AsyncHandler only catches unhandled promise rejections from my Express route
@@ -26,6 +26,7 @@ export const postUsers = asyncHandler (async (req, res) => {
   span.setAttribute('form.validation', 'passed');
 
   const { username, lastname, email, message, checkbox } = result.data;
+  
 
   return tracer.startActiveSpan('process-contact-form', async (businessSpan) => {
     try {
@@ -38,35 +39,7 @@ export const postUsers = asyncHandler (async (req, res) => {
       businessSpan.setAttribute('db.operation', 'insert');
       businessSpan.setAttribute('db.success', true);
       
-      await tracer.startActiveSpan('process-email-service', async (emailServiceSpan) => {
-      try {
-        // Attempting the email send
-        await sendEmail ({       
-          to: 'padularrosathiago26@gmail.com',
-          subject: `New message from ${username}`,
-          text: `From: ${email}\n\nMessage: ${message}`,
-          html: `
-            <h2>New Message</h2>
-            <p><strong>Username: ${username}</strong></p>
-            <p><strong>Lastname: ${lastname}</strong></p>
-            <p><strong>From:</strong> ${email}</p>
-            <p>${message}</p>
-          `,
-        });
-        emailServiceSpan.setAttribute('email-service.operation', 'send');  
-        emailServiceSpan.setAttribute('email-service.success', true);
-      } catch (error) {
-        emailServiceSpan.recordException(error);
-        emailServiceSpan.setStatus({
-          code: SpanStatusCode.ERROR,
-          message: error.message,
-        });
-
-        throw error
-      } finally {
-        emailServiceSpan.end();
-      }
-    });
+      await emailSendUser({ username, lastname, email, message }); // Calling the email service to send
 
       if (config.NODE_ENV !== 'production') {
         console.log('The data has been received successfully', result.data);
