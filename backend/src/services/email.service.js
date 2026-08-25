@@ -2,12 +2,13 @@ import nodemailer from 'nodemailer';
 import transporter from '../config/email.config.js';
 import config from '../config/config.js';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
+import { sendExpensiveEmail } from './emailExpensiveOP.js';
 
 // The execution function to send a message
 export async function sendEmail({ to, subject, text, html }) {
   const tracer = trace.getTracer('portfolio.email-service', '1.0.0');
 
-  return tracer.startActiveSpan('send-email', async (emailSpan) => {
+  return tracer.startActiveSpan('process.send-email', async (span) => {
     try {
       // This is the message with the email content and headers 
       const mailOptions = {
@@ -17,24 +18,14 @@ export async function sendEmail({ to, subject, text, html }) {
         text,
         html,
       };
-      
-      // The callback. If this is omitted, sendMail return only a Promise.
-      const info = await transporter.sendMail(mailOptions);
-      console.log("Message sent: %s", info.messageId);
+      await sendExpensiveEmail(transporter, mailOptions);
 
-      if (info.rejected.length > 0) {
-        console.warn("Some recipients were rejected by the server:", info.rejected);
-      } else if (!info.accepted || info.accepted.length === 0) {
-        return console.warn("There are no recipients that accepted the message.");
-      }
-
-      emailSpan.setAttribute('email-service.feature', 'send');
-      emailSpan.setAttribute('email-service.operation', 'send-email');
-      emailSpan.setAttribute('email-service.success', true);
-      return info;
+      span.setAttribute('email-service.feature', 'send');
+      span.setAttribute('email-service.operation', 'send-email');
+      span.setAttribute('email-service.success', true);
     } catch (error) {
-      emailSpan.recordException.error;
-      emailSpan.setStatus({ 
+      span.recordException(error);
+      span.setStatus({ 
         code: SpanStatusCode.ERROR,
         message: error.message,
       });
@@ -43,7 +34,7 @@ export async function sendEmail({ to, subject, text, html }) {
         case "ECONNECTION":
         case "ETIMEDOUT":
           console.error("Network issue. Queueing for automatic retry...", error.message);
-          await pushToRetyQueue(mailOptions);
+          await pushToRetryQueue(mailOptions);
           break;  
 
         case "EAUTH":
@@ -55,21 +46,19 @@ export async function sendEmail({ to, subject, text, html }) {
           console.error("Rejected emails list:", error.message || []);
           break;
 
-          default:
-            // The Fall back that runs when the main code (above) fails, to reading raw SMTP response codes if available
-            if (error.responseCode && error.responseCode >= 400 && error.responseCode < 500) {
-              console.warn(`Temporary SMTP Error ${error.responseCode}. Will retry.`);
-              await pushToRetyQueue(mailOptions);
-            } else {
-                console.error(`Fatal SMTP Error ${error.responseCode || 'Unknown'}:`, error.message)
-            }
-            break;
+        default:
+          // The Fall back that runs when the main code (above) fails, to reading raw SMTP response codes if available
+          if (error.responseCode && error.responseCode >= 400 && error.responseCode < 500) {
+            console.warn(`Temporary SMTP Error ${error.responseCode}. Will retry.`);
+            await pushToRetryQueue(mailOptions);
+          } else {
+            console.error(`Fatal SMTP Error ${error.responseCode || 'Unknown'}:`, error.message)
+          }
+          break;
       }
       throw error; // This goes forward to my main app controller 
     } finally {
-      emailSpan.end();
+      span.end();
     }
-    
   });
 }
-export default mailOptions;
