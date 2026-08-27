@@ -33,7 +33,7 @@ export const postUsers = asyncHandler (async (req, res) => {
       // Before using result.data i have to validate it first
       const user = await User.create(result.data);
       if (!user) {
-        throw new Error(`User cannot be created.`); // Directly throw
+        throw new Error(`User cannot be created.`);
       }
 
       businessSpan.setAttribute('db.operation', 'insert');
@@ -51,7 +51,7 @@ export const postUsers = asyncHandler (async (req, res) => {
         message: 'Client data processed',
       })    
     } catch (error) {
-      businessSpan.recordException(error); // I track errors in this specific span
+      businessSpan.recordException(error);
       businessSpan.setStatus({ 
         code: SpanStatusCode.ERROR, 
         message: error.message, 

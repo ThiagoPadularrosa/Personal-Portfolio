@@ -1,35 +1,39 @@
-import nodemailer from 'nodemailer';
 import transporter from '../config/email.config.js';
 import config from '../config/config.js';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import { sendExpensiveEmail } from './emailExpensiveOP.js';
+import { prepareEmailOptions } from './emailOptions.js';
 
 // The execution function to send a message
 export async function sendEmail({ to, subject, text, html }) {
   const tracer = trace.getTracer('portfolio.email-service', '1.0.0');
 
-  return tracer.startActiveSpan('process.send-email', async (span) => {
+  return tracer.startActiveSpan('send-email', async (span) => {
+
     try {
-      // This is the message with the email content and headers 
-      const mailOptions = {
-        from: config.EMAIL_FROM,
+      const mailOptions = prepareEmailOptions({
         to,
         subject,
         text,
         html,
-      };
+      });
+
       await sendExpensiveEmail(transporter, mailOptions);
 
       span.setAttribute('email-service.feature', 'send');
       span.setAttribute('email-service.operation', 'send-email');
       span.setAttribute('email-service.success', true);
+      
+      span.setStatus({
+        code: SpanStatusCode.OK,
+        message: 'Email sent successfully',
+      });
     } catch (error) {
       span.recordException(error);
       span.setStatus({ 
         code: SpanStatusCode.ERROR,
         message: error.message,
       });
-      // This checks for specific Nodemailer error codes
       switch(error.code) {
         case "ECONNECTION":
         case "ETIMEDOUT":
