@@ -1,4 +1,4 @@
-import './src/telemetry/instrumentation.js';
+import './src/telemetry/telemetry.mjs';
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
