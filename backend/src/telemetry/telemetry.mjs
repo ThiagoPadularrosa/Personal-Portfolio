@@ -1,3 +1,4 @@
+import { registerHooks } from 'node:module';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
@@ -9,6 +10,8 @@ import {
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
 import config from '../config/config.js';
+
+registerHooks('--experimental-loader=@opentelemetry/instrumentation/hook.mjs', import.meta.url)
 
 const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter,
