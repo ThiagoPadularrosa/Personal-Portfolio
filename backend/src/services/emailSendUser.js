@@ -4,9 +4,8 @@ import { sendEmail } from "./email.service.js";
 export default function emailSendUser({ username, lastname, email, message }) {
   const tracer = trace.getTracer('portfolio.email-service', '1.0.0');
 
-  return tracer.startActiveSpan('process-email-service', async (span) => {
+  return tracer.startActiveSpan('process.email-service', async (span) => {
     try {
-      // Attempting the email send
       await sendEmail ({       
         to: 'padularrosathiago26@gmail.com',
         subject: `New message from ${username}`,

@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   port: config.SMTP_PORT,
   secure: true, // The port 465 use true cuz it tell to nodemailer that the conecction needs to be encrypted via SSL/TLS  
   auth: {
-    user: config.SMTP_USER, // This is always 'resend'
+    user: config.SMTP_USER,
     pass: config.RESEND_API_KEY
   },
 });
