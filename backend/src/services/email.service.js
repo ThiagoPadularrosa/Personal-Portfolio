@@ -1,5 +1,4 @@
 import transporter from '../config/email.config.js';
-import config from '../config/config.js';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import { sendExpensiveEmail } from './emailExpensiveOP.js';
 import { prepareEmailOptions } from './emailOptions.js';
@@ -11,7 +10,7 @@ export async function sendEmail({ to, subject, text, html }) {
   return tracer.startActiveSpan('send-email', async (span) => {
 
     try {
-      const mailOptions = prepareEmailOptions({
+      const mailOptions = await prepareEmailOptions({
         to,
         subject,
         text,

@@ -18,7 +18,7 @@ export async function prepareEmailOptions({ to, subject, text, html }) {
       span.setAttribute('email-option.success', true);
       span.setStatus({ 
         code: SpanStatusCode.OK, 
-        message: 'Email options prepared successfully' 
+        message: 'Email options prepared successfully',
       });
       return mailOptions;
     } catch (error) {
