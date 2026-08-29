@@ -37,7 +37,6 @@ export async function sendEmail({ to, subject, text, html }) {
         case "ECONNECTION":
         case "ETIMEDOUT":
           console.error("Network issue. Queueing for automatic retry...", error.message);
-          await pushToRetryQueue(mailOptions);
           break;  
 
         case "EAUTH":
@@ -53,7 +52,7 @@ export async function sendEmail({ to, subject, text, html }) {
           // The Fall back that runs when the main code (above) fails, to reading raw SMTP response codes if available
           if (error.responseCode && error.responseCode >= 400 && error.responseCode < 500) {
             console.warn(`Temporary SMTP Error ${error.responseCode}. Will retry.`);
-            await pushToRetryQueue(mailOptions);
+
           } else {
             console.error(`Fatal SMTP Error ${error.responseCode || 'Unknown'}:`, error.message)
           }
