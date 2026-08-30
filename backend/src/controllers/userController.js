@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import User from '../models/userModel.js';
 import asyncHandler from "../utils/asyncHandler.js";
 import contactSchema from "../Validators/schemas.js";

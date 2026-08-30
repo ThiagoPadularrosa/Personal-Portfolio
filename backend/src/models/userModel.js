@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    // unique: true,
+    unique: true,
     lowercase: true,
     minLength: 2,
     match: [/@gmail\.com$/i, 'The email should finish with @gmail.com']
