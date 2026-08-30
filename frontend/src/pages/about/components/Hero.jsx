@@ -23,8 +23,7 @@ export default function Hero() {
           <img 
           loading="eager" 
           fetchPriority="high" 
-          src="/images/isagi2.webp"
-          alt="Me squizophrenic asf" 
+          src="/images/isagi2.webp" alt="Me squizophrenic asf" 
           className="block w-full h-auto object-cover" />
         </div>
       </section>
