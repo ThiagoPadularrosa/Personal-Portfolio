@@ -21,7 +21,7 @@ export async function sendEmail({ to, subject, text, html }) {
           };
           span.setAttribute('email-option.operation', 'prepare');
           span.setAttribute('email-option.success', true);
-          span.setStatus({ 
+          span.setStatus({  
             code: SpanStatusCode.OK, 
             message: 'Email options prepared successfully',
           });
@@ -44,8 +44,11 @@ export async function sendEmail({ to, subject, text, html }) {
 
         try {
           const result = await tracer.startActiveSpan('call-email-transporter', async (span) => {
-            span.setAttribute('email-transporter-operation', 'call');
-            span.setAttribute('email.has-transporter', true);
+            span.setAttribute('email.transporter.operation', 'call');
+            span.setAttribute('email.transporter.pool', true);
+            span.setAttribute('email.has.transporter', true);
+            span.setAttribute('email.transporter.max_connections', 1);
+            span.setAttribute('email.smtp.port', config.SMTP_PORT);
 
               try {
               const info = await transporter.sendMail(mailOptions); 
