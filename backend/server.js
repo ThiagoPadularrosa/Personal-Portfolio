@@ -1,7 +1,6 @@
 import './src/telemetry/telemetry.mjs';
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
 import dns from 'dns';  
 import morgan from 'morgan';
 import helmet from "helmet";
@@ -16,6 +15,18 @@ import metricsMiddleware from './src/telemetry/metrics-middleware.js';
 
 const app = express();
 app.port = config.PORT;
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+
+  process.exit(1);
+});
+process.on('uncaughtException', (err, origin) => {
+  console.error(`Caught Exception: ${err}`);
+  console.error(`Exception origin: ${origin}`);
+
+  process.exit(1);
+});
 
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
@@ -73,7 +84,7 @@ app.use(helmet({
     },
   }),
 );  
-// APP.USE works to register middlewares and routes. The order is very important.
+
 // Middlewares
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
