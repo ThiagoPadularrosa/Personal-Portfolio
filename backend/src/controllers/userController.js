@@ -17,10 +17,18 @@ export const postUsers = asyncHandler (async (req, res) => {
     span.setAttribute('api.feature', 'contact'); 
   }
   // Database logic
-  if (!result.success) {
-    span?.setAttribute('form.validation', 'failed');
-    console.log('Failed to received the data:', result.error.issues);
-    return res.status(400).json({ errors: result.error.issues });
+  if (config.NODE_ENV !== 'production') { 
+    if (!result.success) {
+      span?.setAttribute('form.validation', 'failed');
+      console.log('Failed to received the data:', result.error.issues);
+      return res.status(400).json({ errors: result.error.issues });
+    } 
+  } else if (config.NODE_ENV === 'production') {
+    if (!result.success) {
+      span?.setAttribute('form.validation', 'failed');
+      console.log('Failed to received the data', result.error.issues);
+      return res.status(400).json({ errors: 'Failed to process the form data' });
+    }
   }
   span.setAttribute('form.validation', 'passed');
 
@@ -38,24 +46,25 @@ export const postUsers = asyncHandler (async (req, res) => {
       businessSpan.setAttribute('db.operation', 'insert');
       businessSpan.setAttribute('db.success', true);
       
-      await emailSendUser({ username, lastname, email, message }); // Calling the email service to send
 
       if (config.NODE_ENV !== 'production') {
         console.log('The data has been received successfully', result.data);
       }
       console.log(`Contact form submitted by ${username}`);
 
-      return res.status(201).json({ 
+      res.status(201).json({ 
         success: true,
         message: 'Client data processed',
-      })    
+      });
+
+      await emailSendUser({ username, lastname, email, message }); // Calling the email service to send
     } catch (error) {
       businessSpan.recordException(error);
       businessSpan.setStatus({ 
         code: SpanStatusCode.ERROR, 
         message: error.message, 
       });
-      console.log('Failed to send the form.', error.message);
+      console.log('Failed to send the form.');
       return res.status(500).json({ 
         success: false,
         message: 'Something went wrong, please try again.'
