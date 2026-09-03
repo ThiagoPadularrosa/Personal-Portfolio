@@ -7,11 +7,13 @@ import helmet from "helmet";
 import config from './src/config/config.js';
 
 import errorHandler from './src/middlewares/errorHandler.js';
-import { verifyConnection } from './src/config/email.config.js';
 import router from './src/Routes/userRoutes.js';
 import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
+import mongoose from 'mongoose';
+import { verifyConnection } from './src/config/email.config.js';
+import { gracefulShutdown } from './src/config/events.js';
 
 const app = express();
 app.port = config.PORT;
@@ -99,6 +101,9 @@ app.use(errorHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 
-app.listen(config.PORT, () => {
+export const server = app.listen(config.PORT, () => {
 	console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
 });
+
+process.once('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.once('SIGINT', () => gracefulShutdown('SIGINT'));

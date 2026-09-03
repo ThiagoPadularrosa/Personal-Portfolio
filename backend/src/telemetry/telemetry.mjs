@@ -48,17 +48,4 @@ const sdk = new NodeSDK({
 });
 sdk.start(); // This run opentelemetry SKD before everything else
 
-async function shutdown() {
-  try {
-    await sdk.shutdown(); // Shutting down sdk to prevent memory leaks and/or data loss
-    console.log('SDK shut down successfully');
-  } catch (error) {
-    console.log('Error shutting down SDK', error);
-  } finally {
-    process.exit(0);
-  }
-}
-process.once("SIGTERM", shutdown);
-process.once("SIGINT", shutdown);
-
 export default sdk;
