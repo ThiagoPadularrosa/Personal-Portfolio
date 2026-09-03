@@ -18,7 +18,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "build": "npm run build"
+    "build": "npm run build",
+    "start": "node server.js"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.1",

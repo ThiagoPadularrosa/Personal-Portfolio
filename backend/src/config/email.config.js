@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 
 // To verify the connection to my email service
 export async function verifyConnection() {
-  
   try {
     const start = performance.now();
     await transporter.verify();

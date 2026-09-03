@@ -24,7 +24,7 @@ function metricsMiddleware(req, res, next) {
   // Hook into the response finish event
   res.on('finish', () => {
     const duration = (Date.now() - startTime) / 1000;
-    const route = req.route?.path
+    const route = req.route?.path8
       ? `${req.baseUrl || ''}${req.route.path}`
       : 'unknown';
     const method = req.method;
