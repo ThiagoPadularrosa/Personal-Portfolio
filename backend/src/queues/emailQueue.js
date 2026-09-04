@@ -1,5 +1,5 @@
-import transporter from "../config/email.config";
-import retryEmail from "../models/emailRetryModel";
+import transporter from "../config/email.config.js";
+import retryEmail from "../models/emailRetryModel.js";
 
 
 export async function pushToRetryQueue(emailData, error) {
