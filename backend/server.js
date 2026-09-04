@@ -8,6 +8,7 @@ import helmet from "helmet";
 import config from './src/config/config.js';
 
 import errorHandler from './src/middlewares/errorHandler.js';
+import noResponseHandler from './src/middlewares/noResponseHandler.js';
 import router from './src/Routes/userRoutes.js';
 import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
@@ -88,6 +89,7 @@ app.use(metricsMiddleware);
 // Routes and error handler
 app.use('/api', router);
 app.use(errorHandler);
+app.use(noResponseHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 

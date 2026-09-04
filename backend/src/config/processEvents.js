@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { server } from "../../server.js";
 
 export async function gracefulShutdown(signal) {

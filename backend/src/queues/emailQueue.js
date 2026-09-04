@@ -1,7 +1,6 @@
 import transporter from "../config/email.config.js";
 import retryEmail from "../models/emailRetryModel.js";
 
-
 export async function pushToRetryQueue(emailData, error) {
   await retryEmail.create({
       emailData: JSON.stringify(emailData),
