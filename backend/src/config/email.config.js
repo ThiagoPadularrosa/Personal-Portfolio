@@ -12,12 +12,15 @@ const transporter = nodemailer.createTransport({
     user: config.SMTP_USER,
     pass: config.RESEND_API_KEY
   },
+  connectionTimeout: 10000, // 10 seconds for the initial connection
+  greetingTimeout: 5000,    // 5 seconds for the initial greeting
+  socketTimeout: 10000,     // 10 seconds of inactivity before timing out
+  transactionLog: true,
   logger: true,
-  debug: true,
 });
 
 // To verify the connection to my email service
-export async function verifyConnection() {
+export async function verifyEmailServiceConnection() {
   try {
     const start = performance.now();
     await transporter.verify();

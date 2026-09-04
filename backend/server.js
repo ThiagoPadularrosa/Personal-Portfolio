@@ -1,3 +1,4 @@
+registerGracefulShutdownHandlers();
 import './src/telemetry/telemetry.mjs';
 import express from 'express';
 import cors from 'cors';
@@ -12,28 +13,18 @@ import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
 import mongoose from 'mongoose';
-import { verifyConnection } from './src/config/email.config.js';
-import { gracefulShutdown } from './src/config/events.js';
+import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
+import { processDbRetryQueue } from './src/queues/emailQueue.js';
+import { verifyEmailServiceConnection } from './src/config/email.config.js';
 
 const app = express();
 app.port = config.PORT;
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-
-  process.exit(1);
-});
-process.on('uncaughtException', (err, origin) => {
-  console.error(`Caught Exception: ${err}`);
-  console.error(`Exception origin: ${origin}`);
-
-  process.exit(1);
-});
-
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
-connectDB(); // To establish a consistent connection between Node.js app and my database (MongoDB)
-verifyConnection(); // To verify the connection to my email service
+connectDB();
+setInterval(async () => { await processDbRetryQueue(); }, 60000);
+verifyEmailServiceConnection();
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -66,7 +57,6 @@ const corsOptions = {
 };
 
 const isDevelopment = app.get("env") === "development";
-
 app.use(helmet({
     frameguard: { action: 'deny' }, // Sets X-Frame-Options to SAMEORIGIN by default
     contentSecurityPolicy: {
