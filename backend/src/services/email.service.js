@@ -1,6 +1,7 @@
 import transporter from '../config/email.config.js';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import config from '../config/config.js'; 
+import { pushToRetryQueue } from '../queues/emailQueue.js';
 
 // The execution function to send a message
 export async function sendEmail({ to, subject, text, html }) {
@@ -108,24 +109,26 @@ export async function sendEmail({ to, subject, text, html }) {
         case "ECONNECTION":
         case "ETIMEDOUT":
           console.error("Network issue. Queueing for automatic retry...", error.message);
+          await pushToRetryQueue(mailOptions, error);
           break;  
 
         case "EAUTH":
           console.error("CRITICAL: SMTP Authentication failed. Alerting internal dev team...", error.message);
+          await pushToRetryQueue(mailOptions, error);
           break;
         
         case "EENVELOPE":
           console.error("Validation error: Invalid addresses.", error.message);
           console.error("Rejected emails list:", error.message || []);
+          await pushToRetryQueue(mailOptions, error);
           break;
 
         default:
           // The Fall back that runs when the main code (above) fails, to reading raw SMTP response codes if available
           if (error.responseCode && error.responseCode >= 400 && error.responseCode < 500) {
             console.warn(`Temporary SMTP Error ${error.responseCode}. Will retry.`);
-
           } else {
-            console.error(`Fatal SMTP Error ${error.responseCode || 'Unknown'}:`, error.message)
+            console.error(`Fatal SMTP Error ${error.responseCode || 'Unknown'}:`, error.message);
           }
           break;
       }
