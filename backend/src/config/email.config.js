@@ -5,7 +5,7 @@ import config from './config.js';
 const transporter = nodemailer.createTransport({
   host: config.SMTP_HOST,
   port: config.SMTP_PORT,
-  secure: false,
+  secure: true,
   pool: true,
   maxConnections: 1,
   auth: {
