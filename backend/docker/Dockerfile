@@ -27,9 +27,6 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 4000
 
-# Run the application.
-RUN npm run build
-
 # Deps Stage: install production dependencies only.
 FROM node:${NODE_VERSION}-alpine AS deps
 
