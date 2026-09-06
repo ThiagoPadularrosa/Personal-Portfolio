@@ -14,14 +14,15 @@ import config from '../config/config.js';
 registerHooks('--experimental-loader=@opentelemetry/instrumentation/hook.mjs', import.meta.url)
 
 const sdk = new NodeSDK({
-  traceExporter: new OTLPTraceExporter,
   resource: resourceFromAttributes({
     [ATTR_SERVICE_NAME]: config.OTEL_SERVICE_NAME,
     [ATTR_SERVICE_VERSION]: config.SERVICE_VERSION,
   }),
+  traceExporter: new OTLPTraceExporter({
+    url: 'http://collector:4318/v1/traces',
+  }),
   metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter,
-    // Export metrics every 60seconds
+    exporter: new OTLPMetricExporter, 
     exportIntervalMillis: 60000,
   }),
   instrumentations: [getNodeAutoInstrumentations({
