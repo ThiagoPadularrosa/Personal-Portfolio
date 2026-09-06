@@ -1,5 +1,5 @@
-registerGracefulShutdownHandlers();
 import './src/telemetry/telemetry.mjs';
+registerGracefulShutdownHandlers();
 import express from 'express';
 import cors from 'cors';
 import dns from 'dns';  
