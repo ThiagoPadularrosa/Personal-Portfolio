@@ -1,4 +1,3 @@
-import { registerHooks } from 'node:module';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
@@ -11,8 +10,6 @@ import {
 } from '@opentelemetry/semantic-conventions';
 import config from '../config/config.js';
 
-registerHooks('--experimental-loader=@opentelemetry/instrumentation/hook.mjs', import.meta.url)
-
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({
     [ATTR_SERVICE_NAME]: config.OTEL_SERVICE_NAME,
@@ -22,7 +19,9 @@ const sdk = new NodeSDK({
     url: 'http://collector:4318/v1/traces',
   }),
   metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter, 
+    exporter: new OTLPMetricExporter({
+      url: 'http://collector:4318/v1/traces',
+    }), 
     exportIntervalMillis: 60000,
   }),
   instrumentations: [getNodeAutoInstrumentations({
