@@ -19,37 +19,52 @@ const errorCount = meter.createCounter('http.server.error.count', {
 });
 
 function metricsMiddleware(req, res, next) {
+  // Checking if req or res exist to prevent errors if invoked incorrectly
+  if (!req || !res) {
+    return next ? next() : void 0;
+  }
+
   const startTime = Date.now();
 
   // Hook into the response finish event
   res.on('finish', () => {
-    const duration = (Date.now() - startTime) / 1000;
-    const route = req.route?.path8
-      ? `${req.baseUrl || ''}${req.route.path}`
-      : 'unknown';
-    const method = req.method;
-    const statusCode = res.statusCode;
+      try {   
+        const duration = (Date.now() - startTime) / 1000;
 
-    // Common attributes for all metrics
-    const attributes = {
-      'http.request.method': method,
-      'http.route': route,
-      'http.response.status_code': statusCode,
-    };
+        // Building the route string
+        const baseUrl = req.baseUrl || '';
+        const routePath = req.route?.path || 'unknown';
+        const route = routePath !== 'unknown'
+          ? `${baseUrl}${routePath}`
+          : 'unknown';
 
-    // Record latency
-    requestDuration.record(duration, attributes);
+        const method = req.method || 'UNKNOWN';
+        const statusCode = res.statusCode || 200;
 
-    // Record throughput
-    requestCount.add(1, attributes);
+        // Common attributes for all metrics
+        const attributes = {
+          'http.request.method': String(method),
+          'http.route': String(route),
+          'http.response.status_code': Number(statusCode),
+        };
 
-    // Record errors (4xx and 5xx)
-    if (statusCode >= 400) {
-      errorCount.add(1, attributes);
-    }
+        // Record latency
+        requestDuration?.record?.(duration, attributes);
+        // Record throughput
+        requestCount?.add?.(1, attributes);
+
+        // Record errors (4xx and 5xx)
+        if (statusCode >= 400) {
+          errorCount?.add?.(1, attributes);
+        }
+      } catch (error) {
+        console.error('Error recording OpenTelemetry metrics:', error);
+      }
   });
 
-  next();
+  if (typeof next === 'function') {
+    next();
+  }
 }
 
 export default metricsMiddleware;
