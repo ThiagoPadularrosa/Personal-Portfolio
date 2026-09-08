@@ -20,8 +20,8 @@ const sdk = new NodeSDK({
   }),
   metricReader: new PeriodicExportingMetricReader({
     exporter: new OTLPMetricExporter({
-      url: 'http://collector:4318/v1/traces',
-    }), 
+      url: 'http://collector:4318/v1/metrics',
+    }),
     exportIntervalMillis: 60000,
   }),
   instrumentations: [getNodeAutoInstrumentations({
