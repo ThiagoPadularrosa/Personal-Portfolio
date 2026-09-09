@@ -114,20 +114,6 @@ services:
       - app-network-dev
       - app-network
 
-  cloudflare-tunnel:
-    profiles:
-      - dev
-      - prod
-    image: cloudflare/cloudflared:latest
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    networks:
-      - app-network-dev
-    depends_on:
-      - backend-api-dev
-    restart: unless-stopped
-
   jaeger:
     profiles:
       - dev
