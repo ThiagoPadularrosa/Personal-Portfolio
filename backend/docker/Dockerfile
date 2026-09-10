@@ -2,52 +2,46 @@
 
 ARG NODE_VERSION=24.16.0
 
+# Stage 1: Application dependencies and source
 FROM node:${NODE_VERSION}-alpine AS builder
-
-# Use production node environment by default.
-ENV NODE_ENV production
-
+ENV NODE_ENV=production
 WORKDIR /usr/src/app
-
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
     npm ci
-
-# Run the application as a non-root user.
-USER node
-
-# Copy the rest of the source files into the image.
 COPY . .
 
-# Expose the port that the application listens on.
-EXPOSE 4000
 
-# Deps Stage: install production dependencies only.
+# Stage 2:Deps Stage: install production dependencies only.
 FROM node:${NODE_VERSION}-alpine AS deps
-
-#Path inside the container not in my local machine
+ENV NODE_ENV=production
 WORKDIR /usr/src/app 
-
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
-# Runner Stage: a minimal runtime image with compiled app and production deps.
+
+# Stage 3: Runner Stage: a minimal runtime image with compiled app and production deps.
 FROM node:${NODE_VERSION}-alpine AS runner
-
-ENV PATH=/app/node_modules/.bin:$PATH
-
+ENV NODE_ENV=production
 WORKDIR /usr/src/app
-
-COPY --from=deps --chown=node:node /usr/src/app/node_modules ./node_modules
-COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
-
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 --ingroup nodejs expressjs
+# Production Dependencies
+COPY --from=deps --chown=expressjs:nodejs \
+    /usr/src/app/node_modules \
+    ./node_modules
+# Application Source
+COPY --from=builder --chown=expressjs:nodejs \
+    /usr/src/app/src \
+    ./src
+# Entry Point
+COPY --from=builder --chown=expressjs:nodejs \
+    /usr/src/app/server.js \
+    ./server.js
+COPY --from=builder --chown=expressjs:nodejs \
+    /usr/src/app/otelcol.yaml \
+    ./otelcol.yaml
+USER expressjs
 EXPOSE 4000
-
-CMD ["node", "dist/server.js"]
+CMD ["node", "server.js"]
