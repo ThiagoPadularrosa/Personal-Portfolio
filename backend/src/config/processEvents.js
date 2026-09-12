@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import sdk from "../telemetry/telemetry.mjs";
 import { server } from "../../server.js";
-import transporter from "./email.config.js";
 
 export async function gracefulShutdown(signal) {
   console.log(`Received ${signal}. Closing MongoDB connection, OpenTelemetry SDK, and HTTP server...`);
@@ -13,9 +12,8 @@ export async function gracefulShutdown(signal) {
     try {
     await mongoose.connection.close();
     await sdk.shutdown();
-    transporter.close();
     clearTimeout(forceExit);
-    console.log('MongoDB, transporter and OpenTelemetry SDK closed successfully');
+    console.log('MongoDB and OpenTelemetry SDK closed successfully');
     process.exit(0);    
   } catch (error) { 
     console.error('Error during graceful shutdown:', error);

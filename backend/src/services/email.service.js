@@ -5,7 +5,6 @@ import { SpanStatusCode, trace } from '@opentelemetry/api';
 // The execution function to send a message
 export async function sendEmail({ to, subject, text, html }) {
   const tracer = trace.getTracer('portfolio.email-service', '1.0.0');
-  const resendApiUrl = 'https://api.resend.com/emails';
   
   return tracer.startActiveSpan('email-api', async (span) => {
     let mailOptions;
@@ -50,13 +49,13 @@ export async function sendEmail({ to, subject, text, html }) {
             span.setAttribute('email.api.operation', 'send');
 
               try {
-              const response = await fetch(resendApiUrl, {
+              const response = await fetch(config.RESEND_API_URL, {
                 method: 'POST',
                 headers: {
-                  'Authorization': `Bearer ${config.RESEND_API_KEY}`,
+                  Authorization: `Bearer ${config.RESEND_API_KEY}`,
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(mailOptions)
+                body: JSON.stringify(mailOptions),
               }); 
               const data = await response.json();
               if (!response.ok) {
