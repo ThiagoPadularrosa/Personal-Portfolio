@@ -27,7 +27,7 @@ setInterval(async () => { await processDbRetryQueue(); }, 60000);
 
 const allowedOrigins = [
   'https://personal-portfolio-server-wh2q.onrender.com',
-
+  '',
   // DEV ORIGINS
   // 'http://localhost:5173',
   // 'http://localhost:5500',
@@ -87,6 +87,9 @@ app.use(rateLimiterMiddleware);
 app.use(metricsMiddleware);
 
 // Routes and error handlers
+app.get('/', (req, res) => {
+  res.status(200).send('¡The backend is alive!');
+})
 app.use('/api', router);
 app.use(errorHandler);
 app.use(noResponseHandler);
