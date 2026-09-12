@@ -1,17 +1,16 @@
+import transporter from '../config/email.config.js';
+import { SpanStatusCode, trace } from '@opentelemetry/api';
 import config from '../config/config.js'; 
 import { pushToRetryQueue } from '../queues/emailQueue.js';
-import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 // The execution function to send a message
 export async function sendEmail({ to, subject, text, html }) {
   const tracer = trace.getTracer('portfolio.email-service', '1.0.0');
-  const resendApiUrl = 'https://api.resend.com/emails';
-  
-  return tracer.startActiveSpan('email-api', async (span) => {
-    let mailOptions;
+
+  return tracer.startActiveSpan('send-email', async (span) => {
     try {
       // Prepare mailOptions
-      mailOptions = await tracer.startActiveSpan('prepare-mail-options', async (span) => {
+      const mailOptions = await tracer.startActiveSpan('prepare-mail-options', async (span) => {
         try {
           // This is the message OBJECT
           const options = {
@@ -40,36 +39,31 @@ export async function sendEmail({ to, subject, text, html }) {
         }
       });
       // Send Email
-      await tracer.startActiveSpan('send-email', async (span) => {
-        span.setAttribute('email.provider', 'resend');
-        span.setAttribute('email.protocol', 'https');
-        span.setAttribute('server.address', 'api.resend.com');
+      await tracer.startActiveSpan('send-expensive-email', async (span) => {
+        span.setAttribute('email.operation', 'send');
+        span.setAttribute('email.has_recipient', true);
 
         try {
-          const result = await tracer.startActiveSpan('call-resend-api', async (span) => {
-            span.setAttribute('email.api.operation', 'send');
+          const result = await tracer.startActiveSpan('call-email-transporter', async (span) => {
+            span.setAttribute('email.transporter.operation', 'call');
+            span.setAttribute('email.transporter.pool', true);
+            span.setAttribute('email.has.transporter', true);
+            span.setAttribute('email.transporter.max_connections', 1);
+            span.setAttribute('email.smtp.port', config.SMTP_PORT);
 
               try {
-              const response = await fetch(resendApiUrl, {
-                method: 'POST',
-                headers: {
-                  'Authorization': `Bearer ${config.RESEND_API_KEY}`,
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(mailOptions)
-              }); 
-              const data = await response.json();
-              if (!response.ok) {
-                const error = new Error(data.message || 'Resend API error');
-                error.status = response.status;
-                error.resendCode = data.name;
-                throw error;
-              }
+              const info = await transporter.sendMail(mailOptions); 
+              console.log("Message sent: %s", info.messageId);
+              if (info.rejected.length > 0) {
+                console.warn("Some recipients were rejected by the server:", info.rejected);
+              } else if (!info.accepted || info.accepted.length === 0) {
+                throw new Error('No recipients accepted the email.');
+              }  
               span.setStatus({ 
                 code: SpanStatusCode.OK, 
-                message: 'The call to the Resend API succeeded', 
+                message: 'The call to the transporter was a success', 
               });
-              return data;
+              return info;
             } catch (error) {
               span.recordException(error);
               span.setStatus({
@@ -83,7 +77,7 @@ export async function sendEmail({ to, subject, text, html }) {
             }
           });
           span.setStatus({ code: SpanStatusCode.OK, message: 'Email sent successfully', });
-          span.setAttribute('email.message_id', result.id);
+          span.setAttribute('email.messageId', result.messageId);
         } catch (error) { 
           span.recordException(error);
           span.setStatus({ 
@@ -97,6 +91,7 @@ export async function sendEmail({ to, subject, text, html }) {
         }
       });
 
+      span.setAttribute('email-service.feature', 'send');
       span.setAttribute('email-service.operation', 'send-email');
       span.setAttribute('email-service.success', true);
       
@@ -110,40 +105,33 @@ export async function sendEmail({ to, subject, text, html }) {
         code: SpanStatusCode.ERROR,
         message: error.message,
       });
-      switch(error.status) {
-        case 401:
-          console.error("Authentication error:", error.message);
+      switch(error.code) {
+        case "ECONNECTION":
+        case "ETIMEDOUT":
+          console.error("Network issue. Queueing for automatic retry...", error.message);
+          await pushToRetryQueue(mailOptions, error);
           break;  
 
-        case 422:
-          console.error("Validation failed:", error.message);
+        case "EAUTH":
+          console.error("CRITICAL: SMTP Authentication failed. Alerting internal dev team...", error.message);
+          await pushToRetryQueue(mailOptions, error);
           break;
         
-        case 404:
-          console.error("Endpoint or resource not found:", error.message);
+        case "EENVELOPE":
+          console.error("Validation error: Invalid addresses.", error.message);
+          console.error("Rejected emails list:", error.message || []);
+          await pushToRetryQueue(mailOptions, error);
           break;
-
-        case 429:
-          console.error("Too many requests:", error.message);
-          if (mailOptions) {
-            await pushToRetryQueue(mailOptions, error);
-          }
-          break;
-
 
         default:
-          // The Fall back that runs when the main code (above) fails, to reading raw HTTP response codes if available
-          if (error.status >= 500) {
-            console.error('Resend API temporary failure:', error.message);
-            if (mailOptions) {
-              await pushToRetryQueue(mailOptions, error);
-            }
+          // The Fall back that runs when the main code (above) fails, to reading raw SMTP response codes if available
+          if (error.responseCode && error.responseCode >= 400 && error.responseCode < 500) {
+            console.warn(`Temporary SMTP Error ${error.responseCode}. Will retry.`);
           } else {
-            console.error('An unhandled error occurred:', error.name, error.message);
+            console.error(`Fatal SMTP Error ${error.responseCode || 'Unknown'}:`, error.message);
           }
           break;
       }
-
       throw error; // This goes forward to my main app controller 
     } finally {
       span.end();
