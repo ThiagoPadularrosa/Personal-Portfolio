@@ -16,7 +16,6 @@ import metricsMiddleware from './src/telemetry/metrics-middleware.js';
 import mongoose from 'mongoose';
 import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
 import { processDbRetryQueue } from './src/queues/emailQueue.js';
-import { verifyEmailServiceConnection } from './src/config/email.config.js';
 
 const app = express();
 app.port = config.PORT;
@@ -25,14 +24,15 @@ dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
 connectDB();
 setInterval(async () => { await processDbRetryQueue(); }, 60000);
-verifyEmailServiceConnection();
 
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5500',
-  'http://localhost:4000',
-  'http://127.0.0.1:5500',
-  // In production mode i have to add my real domain to allow it
+  'https://personal-portfolio-server-wh2q.onrender.com',
+
+  // DEV ORIGINS
+  // 'http://localhost:5173',
+  // 'http://localhost:5500',
+  // 'http://localhost:4000',
+  // 'http://127.0.0.1:5500',
 ];
 
 const corsOptions = {
@@ -86,7 +86,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rateLimiterMiddleware); 
 app.use(metricsMiddleware);
 
-// Routes and error handler
+// Routes and error handlers
 app.use('/api', router);
 app.use(errorHandler);
 app.use(noResponseHandler);
