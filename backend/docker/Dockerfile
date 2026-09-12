@@ -39,6 +39,7 @@ COPY --from=builder --chown=expressjs:nodejs \
 COPY --from=builder --chown=expressjs:nodejs \
     /usr/src/app/server.js \
     ./server.js
+# Collector
 COPY --from=builder --chown=expressjs:nodejs \
     /usr/src/app/otelcol.yaml \
     ./otelcol.yaml

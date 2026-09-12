@@ -89,7 +89,7 @@ app.use(metricsMiddleware);
 // Routes and error handlers
 app.get('/', (req, res) => {
   res.status(200).send('¡The backend is alive!');
-})
+});
 app.use('/api', router);
 app.use(errorHandler);
 app.use(noResponseHandler);
