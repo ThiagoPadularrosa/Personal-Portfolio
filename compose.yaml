@@ -11,7 +11,7 @@ services:
     environment:
       - OTEL_SERVICE_NAME=backend-api-prod
     ports:
-      - "8000:8000"
+      - "8000:4000"
     depends_on:
       collector:
         condition: service_started
@@ -128,4 +128,4 @@ networks:
   app-network-dev:
     driver: bridge
   app-network:
-    driver: bridge 
+    driver: bridge
