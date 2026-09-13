@@ -27,7 +27,8 @@ setInterval(async () => { await processDbRetryQueue(); }, 60000);
 
 const allowedOrigins = [
   'https://personal-portfolio-server-wh2q.onrender.com',
-  '',
+  'codingaddict.vercel.app',
+  ''
   // DEV ORIGINS
   // 'http://localhost:5173',
   // 'http://localhost:5500',
