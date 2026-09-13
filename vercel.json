@@ -3,8 +3,7 @@
     "frontend": {
       "runtime": "container",
       "root": "frontend/",
-      "entrypoint": "Dockerfile.vercel",
-      "framework": "vite"
+      "entrypoint": "Dockerfile.vercel"
     },
     "backend": {
       "runtime": "container",

@@ -1,5 +1,6 @@
 import './src/telemetry/telemetry.mjs';
-registerGracefulShutdownHandlers();
+
+
 import express from 'express';
 import cors from 'cors';
 import dns from 'dns';  
@@ -20,6 +21,7 @@ import { processDbRetryQueue } from './src/queues/emailQueue.js';
 const app = express();
 app.port = config.PORT;
 
+registerGracefulShutdownHandlers();
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
 connectDB();
@@ -88,9 +90,6 @@ app.use(rateLimiterMiddleware);
 app.use(metricsMiddleware);
 
 // Routes and error handlers
-app.get('/', (req, res) => {
-  res.status(200).send('¡The backend is alive!');
-});
 app.use('/api', router);
 app.use(errorHandler);
 app.use(noResponseHandler);
