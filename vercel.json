@@ -3,12 +3,12 @@
     "my_frontend": {
       "runtime": "container",
       "root": "frontend/",
-      "entrypoint": "docker/Dockerfile.vercel"
+      "entrypoint": "Dockerfile.vercel"
     },
     "my_backend": {
       "runtime": "container",
       "root": "backend/",
-      "entrypoint": "docker/Dockerfile.vercel"
+      "entrypoint": "Dockerfile.vercel"
     }
   },
   "rewrites": [
