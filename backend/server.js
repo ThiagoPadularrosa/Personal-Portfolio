@@ -97,11 +97,14 @@ app.use(noResponseHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 
-export const server = app.listen(config.PORT, () => {
-	console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
-});
-
-process.once('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.once('SIGINT', () => gracefulShutdown('SIGINT'));
 // Exporting the Express app
 export default app;
+
+if (config.NODE_ENV === 'development') {
+    const server = app.listen(config.PORT, () => {
+	  console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
+  });
+
+  process.once('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.once('SIGINT', () => gracefulShutdown('SIGINT'));
+}
