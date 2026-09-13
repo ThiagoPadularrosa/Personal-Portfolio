@@ -42,6 +42,7 @@ Thumbs.db
 
 # Ignore Docker-related files (to avoid copying unnecessary configs)
 Dockerfile
+Dockerfile.vercel
 .dockerignore
 docker-compose.yml
 docker-compose.override.yml
