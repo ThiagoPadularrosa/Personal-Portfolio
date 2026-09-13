@@ -10,7 +10,14 @@ COPY package.json package-lock.json* ./
 # Install project dependencies using npm ci (ensures a clean, reproducible install)
 RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
-RUN npm run build
+RUN echo "=== FRONTEND BUILD DEBUG ===" && \
+    pwd && \
+    ls -la && \
+    find . -maxdepth 3 -type f | sort && \
+    echo "=== PACKAGE ===" && \
+    cat package.json && \
+    echo "=== BUILD ===" && \
+    npm run build
 
 # =========================================
 # Stage 2: Prepare Nginx to Serve Static Files
