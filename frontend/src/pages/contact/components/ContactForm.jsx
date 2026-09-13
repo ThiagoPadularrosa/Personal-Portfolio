@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import clsx from 'clsx';
 import Notification from '../../../components/Notification';
 import useFrontendValidation from '../../../hooks/useFrontendValidation';
 
@@ -10,7 +8,6 @@ export default function FormContact() {
     notification,
     error,
     errors,
-    hasError,
     handleInputChange,
     handleSubmit, } =  useFrontendValidation();
 
