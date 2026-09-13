@@ -2,12 +2,13 @@
   "services": {
     "my_frontend": {
       "runtime": "container",
-      "root": "frontend/"
+      "root": "frontend/",
+      "entrypoin": "docker/Dockerfile.vercel"
     },
     "my_backend": {
       "runtime": "container",
       "root": "backend/",
-      "entrypoint": "server.js"
+      "entrypoint": "docker/Dockerfile.vercel"
     }
   },
   "rewrites": [

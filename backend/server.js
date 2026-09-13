@@ -103,3 +103,5 @@ export const server = app.listen(config.PORT, () => {
 
 process.once('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.once('SIGINT', () => gracefulShutdown('SIGINT'));
+// Exporting the Express app
+export default app;
