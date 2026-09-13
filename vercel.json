@@ -3,7 +3,7 @@
     "my_frontend": {
       "runtime": "container",
       "root": "frontend/",
-      "entrypoin": "docker/Dockerfile.vercel"
+      "entrypoint": "docker/Dockerfile.vercel"
     },
     "my_backend": {
       "runtime": "container",
