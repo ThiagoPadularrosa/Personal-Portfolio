@@ -1,11 +1,11 @@
 import './src/telemetry/telemetry.mjs';
 
-
 import express from 'express';
 import cors from 'cors';
 import dns from 'dns';  
 import morgan from 'morgan';
 import helmet from "helmet";
+import mongoose from 'mongoose';
 import config from './src/config/config.js';
 
 import errorHandler from './src/middlewares/errorHandler.js';
@@ -14,9 +14,9 @@ import router from './src/Routes/userRoutes.js';
 import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
-import mongoose from 'mongoose';
-import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
 import { processDbRetryQueue } from './src/queues/emailQueue.js';
+import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
+import { createServer } from 'http';
 
 const app = express();
 app.port = config.PORT;
@@ -96,8 +96,9 @@ app.use(noResponseHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 
-// Exporting the Express app
-export default app;
+app.listen(config.PORT, () => {
+  console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
+});
 
 if (config.NODE_ENV === 'development') {
     const server = app.listen(config.PORT, () => {
