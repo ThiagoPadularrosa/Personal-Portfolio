@@ -3,7 +3,10 @@
     "frontend": {
       "runtime": "container",
       "root": "frontend/",
-      "entrypoint": "Dockerfile.vercel"
+      "entrypoint": "Dockerfile.vercel",
+      "env": {
+        "PORT": "8080"
+      }
     },
     "backend": {
       "runtime": "container",
