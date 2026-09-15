@@ -13,7 +13,7 @@ export default function FormContact() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} action={`https://codingaddict.vercel.app/api/data`} method='POST' className='block size-fit' noValidate >
+      <form onSubmit={handleSubmit} action={`${import.meta.env.VITE_API_URL}}/api/data`} method='POST' className='block size-fit' noValidate >
         <div className="flex flex-col items-baseline lg:pl-12">
           <div className="flex flex-col max-w-171.25 py-4 px-0 gap-3">
             <h3 className='font-courier text-[#1a1a2e] font-bold w-fit text-[2.5rem] text-left lg:text-7xl'>
