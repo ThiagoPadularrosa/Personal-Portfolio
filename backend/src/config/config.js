@@ -13,7 +13,7 @@ export const variables = {
   SMTP_USER: process.env.SMTP_USER   || 'resend',
   EMAIL_FROM: process.env.EMAIL_FROM || 'onboarding@resend.dev',
   RESEND_API_KEY: process.env.RESEND_API_KEY,
-  RESEND_API_URL: process.env.RESEND_API_URL || 'https://api.resend.com/emails',
+  RESEND_API_URL: process.env.RESEND_API_URL || 'https://resend.com',
   // Frontend URL
   FRONTEND_URL: process.env.FRONTEND_URL,
   // OpenTelemetry Credentials
