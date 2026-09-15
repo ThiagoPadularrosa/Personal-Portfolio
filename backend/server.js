@@ -16,7 +16,6 @@ import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
 import { processDbRetryQueue } from './src/queues/emailQueue.js';
 import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
-import { createServer } from 'http';
 
 const app = express();
 app.port = config.PORT;
@@ -96,11 +95,11 @@ app.use(noResponseHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 
-app.listen(config.PORT, () => {
-  console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
+app.listen(Number(config.PORT), () => {
+  console.log(`Server is running on port ${config.PORT}`);
 });
 
-if (config.NODE_ENV === 'development') {
+if (config.NODE_ENV !== 'production') {
     const server = app.listen(config.PORT, () => {
 	  console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
   });
