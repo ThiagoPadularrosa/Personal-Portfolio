@@ -95,9 +95,11 @@ app.use(noResponseHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 
-app.listen(Number(config.PORT), () => {
-  console.log(`Server is running on port ${config.PORT}`);
-});
+// app.listen(Number(config.PORT), () => {
+//   console.log(`Server is running on port ${config.PORT}`);
+// });
+
+export default app;
 
 if (config.NODE_ENV !== 'production') {
     const server = app.listen(config.PORT, () => {
