@@ -10,8 +10,9 @@ services:
       - ./backend/.env
     environment:
       - OTEL_SERVICE_NAME=backend-api-prod
+      - PORT=${PORT}
     ports:
-      - "8000:4000"
+      - "${PORT}:${PORT}"
     depends_on:
       collector:
         condition: service_started
