@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import useNotification from "./useNotification";
 
 export default function useBackendValidation() {
@@ -12,7 +12,7 @@ export default function useBackendValidation() {
 
     // Fetch call
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/data`, {
+      const response = await fetch(`/api/data`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,18 +26,15 @@ export default function useBackendValidation() {
       if (!response.ok) { 
         // Here i handle backend validation failures (400/422 bad requests is a good expm)
         // Also every code that i write after throw is dead code. It won't show
-        setUserNameError(Data.error);
         throw new Error(Data.message || `Server responded with status ${response.status}`); 
       }
       
-      // Here i handle the successful response
       showNotification( 'success', Data.message || 'Data submitted successfully!', 5350 );
       // Logs
       console.log('Server response:', Data);  
       console.log("Form submitted");
 
     } catch (error) {
-      //  This is to handle network or unexpected system errors
       console.error('Request failed:', error.message);
       showNotification( 'error', error.message || 'A network error ocurred.', 5350 );
     };

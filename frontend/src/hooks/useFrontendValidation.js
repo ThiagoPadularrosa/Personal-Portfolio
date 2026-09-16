@@ -1,6 +1,5 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useBackendValidation from "./useBackendValidation";
-import useNotification from "./useNotification";
 
 export default function useFrontendValidation() {
 
@@ -16,7 +15,6 @@ export default function useFrontendValidation() {
   
   const [error, setError] = useState(""); 
   const [errors, setErrors] = useState({}); // To displayed errors for UI
-  const [hasError, setHasError] = useState(false);
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org)$/;
 
   const handleInputChange = (e) => {
@@ -87,7 +85,6 @@ export default function useFrontendValidation() {
     notification,
     error,
     errors,
-    hasError,
     handleInputChange,
     handleSubmit,
     userNameError
