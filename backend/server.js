@@ -1,4 +1,7 @@
 import './src/telemetry/telemetry.mjs';
+import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
+
+registerGracefulShutdownHandlers();
 
 import express from 'express';
 import cors from 'cors';
@@ -7,7 +10,6 @@ import morgan from 'morgan';
 import helmet from "helmet";
 import mongoose from 'mongoose';
 import config from './src/config/config.js';
-
 import errorHandler from './src/middlewares/errorHandler.js';
 import noResponseHandler from './src/middlewares/noResponseHandler.js';
 import router from './src/Routes/userRoutes.js';
@@ -15,12 +17,12 @@ import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
 import { processDbRetryQueue } from './src/queues/emailQueue.js';
-import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
+
 
 const app = express();
 app.port = config.PORT;
 
-registerGracefulShutdownHandlers();
+
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
 connectDB();
