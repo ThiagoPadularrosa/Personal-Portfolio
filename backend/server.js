@@ -1,5 +1,5 @@
 import './src/telemetry/telemetry.mjs';
-import { gracefulShutdown, registerGracefulShutdownHandlers } from './src/config/processEvents.js';
+import { registerGracefulShutdownHandlers } from './src/config/prod.processEvents.js';
 
 registerGracefulShutdownHandlers();
 
