@@ -1,6 +1,5 @@
 import mongoose, { mongo } from "mongoose";
 import sdk from "../telemetry/telemetry.mjs";
-import { server } from "../../server.js";
 import variables from "./config.js";
 import connectDB from "../db/connection.js";
 import User from "../models/userModel.js";
