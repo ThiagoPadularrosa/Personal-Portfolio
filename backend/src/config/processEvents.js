@@ -25,7 +25,9 @@ export async function gracefulShutdown(signal) {
     }
     });
   } else if (variables.NODE_ENV === 'production') {
-    console.log(`Received ${signal}: Cleaning up Vercel functions resources.`);
+    console.log(`Received ${signal}: Cleaning up Vercel functions resources and connections.`);
+    // TODO: Add skd.shutdown logic for serverless function
+
     await connectDB();
     try {
       const users = await User.find({});
