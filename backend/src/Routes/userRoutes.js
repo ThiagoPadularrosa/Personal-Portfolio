@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUsers, getUserById, postUsers, patchUpdateById, deleteUserById } from '../controllers/userController.js';
+import { getUsers, getUserById, postUsers, patchUpdateById, deleteUserById, getRetryQueue } from '../controllers/userController.js';
 const router = express.Router();
 
 // CRUD HTTP REQUESTS ENDPOINTS

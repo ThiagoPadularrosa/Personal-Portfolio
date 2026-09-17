@@ -19,6 +19,8 @@ export const variables = {
   // OpenTelemetry Credentials
   OTEL_SERVICE_NAME: process.env.OTEL_SERVICE_NAME || 'star-future',
   SERVICE_VERSION: process.env.SERVICE_VERSION || '1.0.0',
+  // Cron-Jobs Credentials
+  CRON_SECRET: process.env.CRON_SECRET,
 }
 
 export default variables;

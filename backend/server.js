@@ -12,7 +12,8 @@ import mongoose from 'mongoose';
 import config from './src/config/config.js';
 import errorHandler from './src/middlewares/errorHandler.js';
 import noResponseHandler from './src/middlewares/noResponseHandler.js';
-import router from './src/Routes/userRoutes.js';
+import userRouter from './src/Routes/userRoutes.js';
+import cronRouter from './src/Routes/cronRoutes.js';
 import connectDB from './src/db/connection.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
@@ -89,7 +90,7 @@ app.use(rateLimiterMiddleware);
 app.use(metricsMiddleware);
 
 // Routes and error handlers
-app.use('/api', router);
+app.use('/api', userRouter, cronRouter);
 app.use(errorHandler);
 app.use(noResponseHandler);
 
