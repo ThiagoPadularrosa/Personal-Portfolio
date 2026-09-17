@@ -30,11 +30,9 @@ export async function gracefulShutdown(signal) {
     await connectDB();
     try {
       const users = await User.find({});
-      res.status(200).json({ success: true, data: users });
-      console.log("Cleanup complete. Shutting down safely.");
+      console.log("Cleanup complete. Shutting down safely:", users);
     } catch (error) {
       console.error('Error during graceful shutdown cleanup:', error);
-      res.status(400).json({ success: false });
     }
   }
 };
