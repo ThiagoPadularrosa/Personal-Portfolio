@@ -26,7 +26,9 @@ dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
 connectDB();
 // FIXME: Change interval to be compatible with Vercel
-setInterval(async () => { await processDbRetryQueue(); }, 60000);
+if (config.NODE_ENV !== 'production') {
+  setInterval(async () => { await processDbRetryQueue(); }, 60000);
+}
 
 const allowedOrigins = [
   'https://personal-portfolio-server-wh2q.onrender.com',
