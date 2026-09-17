@@ -1,5 +1,5 @@
-import { processDbRetryQueue } from "../queues/emailQueue";
-import variables from "../config/config";
+import { processDbRetryQueue } from "../queues/emailQueue.js";
+import variables from "../config/config.js";
 
 export const getRetryQueue = asyncHandler (async (req, res) => {
   const authHeader = req.headers.get('authorization');
