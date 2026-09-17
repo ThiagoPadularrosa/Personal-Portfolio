@@ -9,7 +9,7 @@ import {
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
 import config from '../config/config.js';
-
+// HACK: Change how i start sdk for Nodejs runtime
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({
     [ATTR_SERVICE_NAME]: config.OTEL_SERVICE_NAME,
