@@ -1,5 +1,6 @@
 import { processDbRetryQueue } from "../queues/emailQueue.js";
 import variables from "../config/config.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
 export const getRetryQueue = asyncHandler (async (req, res) => {
   const authHeader = req.headers.get('authorization');
