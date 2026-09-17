@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import variables from "../config/config";
+import variables from "../config/config.js";
+
 
 let cached = global.mongoose;
 
@@ -22,11 +23,12 @@ const connectDB =  async () => {
     mongoose.connection.on('disconnected', () => {
       console.log("MongoDB connection lost. Reconnecting...");
     });
+
   } else if (variables.NODE_ENV === 'production') {
     if (cached.conn) {
       return cached.conn;
     }
-
+    
     if (!cached.promise) {
       const opts = {
         bufferCommands: false, // Turn off buffering so queries fail quickly if disconnected
