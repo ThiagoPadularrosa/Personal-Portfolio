@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import * as sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 // Validation means checking if the data is correct before sending it to the database.
 
