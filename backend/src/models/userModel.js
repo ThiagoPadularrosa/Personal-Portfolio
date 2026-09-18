@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { lowercase, maxLength, minLength } from "zod";
-import sanitizeHtml from 'sanitize-html';
+import * as sanitizeHtml from 'sanitize-html';
 
 // Escaping means (as a last resort) to prevent any malicious code from being executed in the database. 
 // This is a security measure to prevent any malicious code from being executed in the database.
