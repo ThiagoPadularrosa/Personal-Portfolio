@@ -98,6 +98,9 @@ app.use(noResponseHandler);
 
 console.log(`The server is running on ${config.NODE_ENV} mode`)
 
+app.listen(config.PORT, () => {
+  console.log(`Sever is running on https://${config.HOST}:${config.PORT}`);
+});
 export default app;
 
 process.once('SIGTERM', () => gracefulShutdown('SIGTERM'));
