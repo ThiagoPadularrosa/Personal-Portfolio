@@ -46,6 +46,12 @@ const sdk = new NodeSDK({
     }),
   ],
 });
-sdk.start(); // This run opentelemetry SKD before everything else
+try {
+  sdk.start(); // This run opentelemetry SDK before everything else
+  console.log("Opentelemetry SDK started successfully");  
+} catch (error) {
+  console.error("Error starting Opentelemetry SDK:", error);
+}
+
 
 export default sdk;

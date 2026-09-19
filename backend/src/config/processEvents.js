@@ -27,7 +27,7 @@ export async function gracefulShutdown(signal) {
     console.log(`Received ${signal}: Cleaning up Vercel functions resources and connections.`);
     
     await connectDB();
-    // TODO: Add skd.shutdown logic for serverless function
+    await sdk.shutdown();
     try {
       const users = await User.find({});
       console.log("Cleanup complete. Shutting down safely:", users);
@@ -38,13 +38,23 @@ export async function gracefulShutdown(signal) {
 };
 
 export function registerGracefulShutdownHandlers() {
-  process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-    process.exit(1);
-  });
-  process.on('uncaughtException', (err, origin) => {
-    console.error(`Caught Exception: ${err}`);
-    console.error(`Exception origin: ${origin}`);
-    process.exit(1);
-  });
+  if (variables.NODE_ENV !== 'production') {
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+      process.exit(1);
+    });
+    process.on('uncaughtException', (err, origin) => {
+      console.error(`Caught Exception: ${err}`);
+      console.error(`Exception origin: ${origin}`);
+      process.exit(1);
+    });
+  } else if (variables.NODE_ENV === 'production') {
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    });
+    process.on('uncaughtException', (err, origin) => {
+      console.error(`Caught Exception: ${err}`);
+      console.error(`Exception origin: ${origin}`);
+    });
+  }
 }
