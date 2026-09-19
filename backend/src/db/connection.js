@@ -32,6 +32,7 @@ const connectDB =  async () => {
     if (!cached.promise) {
       const opts = {
         bufferCommands: false, // Turn off buffering so queries fail quickly if disconnected
+        serverSelectionTimeoutMS: 5000, 
         maxPoolSize: 10,
       }
 
