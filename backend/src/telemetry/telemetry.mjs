@@ -47,7 +47,7 @@ const sdk = new NodeSDK({
   ],
 });
 try {
-  sdk.start(); // This run opentelemetry SDK before everything else
+  sdk.start();
   console.log("Opentelemetry SDK started successfully");  
 } catch (error) {
   console.error("Error starting Opentelemetry SDK:", error);
