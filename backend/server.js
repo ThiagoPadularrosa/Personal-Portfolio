@@ -25,7 +25,6 @@ app.port = config.PORT;
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
 await connectDB();
-// FIXME: Change interval to be compatible with Vercel
 if (config.NODE_ENV !== 'production') {
   setInterval(async () => { await processDbRetryQueue(); }, 60000);
 }
