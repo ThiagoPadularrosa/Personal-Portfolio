@@ -12,14 +12,11 @@ export async function pushToRetryQueue(emailData, error) {
 }
 
 export async function processDbRetryQueue() {
-  console.log(`Starting the retry queue...`);
   const pendingRetries = await retryEmail.find({
     status: 'PENDING', 
     nextRetryAt: { $lte: new Date() }
   });
 
-  
-  console.log(`Pending retries :`, pendingRetries.length);
   for (const record of pendingRetries) {
 
     // Here is the attempt to send the email again
@@ -46,7 +43,7 @@ export async function processDbRetryQueue() {
         status: 'SENT', 
         errorMessage: undefined,
       });
-      
+
 
     } catch (error) {
 
@@ -68,5 +65,4 @@ export async function processDbRetryQueue() {
       }   
     }
   }
-  console.log("Retry queue finished.");
 }
