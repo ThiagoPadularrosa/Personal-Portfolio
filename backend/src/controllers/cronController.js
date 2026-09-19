@@ -3,7 +3,8 @@ import variables from "../config/config.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 export const getRetryQueue = asyncHandler (async (req, res) => {
-  const authHeader = req.headers.get('authorization');
+  const authHeader = req.get('authorization');
+
   if (variables.CRON_SECRET && authHeader !== `Bearer ${variables.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
