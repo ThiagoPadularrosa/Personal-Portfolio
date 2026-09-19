@@ -13,7 +13,6 @@ import config from './src/config/config.js';
 import errorHandler from './src/middlewares/errorHandler.js';
 import noResponseHandler from './src/middlewares/noResponseHandler.js';
 import userRouter from './src/Routes/userRoutes.js';
-import connectDB from './src/db/connection.js';
 import cronRouter from './src/Routes/cronRoutes.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
@@ -24,7 +23,7 @@ app.port = config.PORT;
 
 dns.setServers(['8.8.8.8', '8.8.4.4']); // This forces Google DNS
 
-connectDB();
+await connectDB();
 // FIXME: Change interval to be compatible with Vercel
 if (config.NODE_ENV !== 'production') {
   setInterval(async () => { await processDbRetryQueue(); }, 60000);

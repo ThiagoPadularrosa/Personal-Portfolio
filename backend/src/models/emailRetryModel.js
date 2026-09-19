@@ -21,7 +21,10 @@ const emailSchema = new mongoose.Schema({
     enum: ['PENDING','SENT','FAILED'],
     default: 'PENDING',
   }
-}, {timestamps: true,});
+}, {
+  timestamps: true,
+  bufferCommands: false,
+});
 
 const retryEmail = mongoose.model('RetryEmail', emailSchema);
 

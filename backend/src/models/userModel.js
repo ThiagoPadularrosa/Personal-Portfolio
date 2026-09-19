@@ -54,7 +54,9 @@ const userSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now 
-  }
+  }, 
+}, {
+  bufferCommands: false,
 });
 // CREATE USER COLLECTION
 const User = mongoose.model('User', userSchema);
