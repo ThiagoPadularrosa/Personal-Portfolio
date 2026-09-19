@@ -12,7 +12,7 @@ const connectDB =  async () => {
   if (variables.NODE_ENV !== 'production') {
     try {
       // This function as a way to establish connection using a secure env variable
-      const conn = await mongoose.connect(variables.MONGO_URI);
+      const conn = await mongoose.connect(variables.MONGODB_URI);
     
       console.log(`MongoDB connected: ${conn.connection.host}`);
     } catch (error) {
@@ -36,7 +36,7 @@ const connectDB =  async () => {
         maxPoolSize: 10,
       }
 
-    cached.promise = await mongoose.connect(variables.MONGO_URI, opts).then((mongooseInstance) => {
+    cached.promise = await mongoose.connect(variables.MONGODB_URI, opts).then((mongooseInstance) => {
         console.log(`MongoDB connected: ${mongooseInstance.connection.host}`);
         return mongooseInstance;
       });

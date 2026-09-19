@@ -6,7 +6,7 @@ export const variables = {
   PORT: process.env.PORT         || 4000,
   NODE_ENV: process.env.NODE_ENV,
   HOST: process.env.HOST         || 'localhost',
-  MONGO_URI: process.env.MONGO_URI,
+  MONGODB_URI: process.env.MONGODB_URI,
   // EMAIL SERVICE CREDENTIALS
   SMTP_HOST: process.env.SMTP_HOST   || 'smtp.resend.com',
   SMTP_PORT: process.env.SMTP_PORT   || '465',
