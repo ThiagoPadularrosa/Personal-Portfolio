@@ -17,6 +17,7 @@ import cronRouter from './src/Routes/cronRoutes.js';
 import rateLimiterMiddleware from './src/middlewares/rateLimiter.js';
 import metricsMiddleware from './src/telemetry/metrics-middleware.js';
 import { processDbRetryQueue } from './src/queues/emailQueue.js';
+import connectDB from './src/db/connection.js';
 
 const app = express();
 app.port = config.PORT;
