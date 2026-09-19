@@ -32,7 +32,7 @@ if (config.NODE_ENV !== 'production') {
 const allowedOrigins = [
   'https://personal-portfolio-server-wh2q.onrender.com',
   'https://codingaddict.vercel.app',
-  ''
+  'https://codingaddict-git-main-no-limits4.vercel.app'
   // DEV ORIGINS
   // 'http://localhost:5173',
   // 'http://localhost:5500',
