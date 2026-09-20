@@ -1,20 +1,25 @@
 <img width="1704" height="678" alt="Coding2" src="https://github.com/user-attachments/assets/ee420729-6ea9-4c60-bf33-5a5060167791" />
 
 # Personal Portfolio
-<img alt="Static Badge" src="https://img.shields.io/badge/Status-Completed-brightgreen?style=flat">
+<div style="display: flex; gap: 10;">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Status-Completed-brightgreen?style=for-the-badge">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Licence-Unlicense-21FF85?style=for-the-badge">
+</div>
 
 A simple Personal Portfolio to see my most recent projects. Also you the opportunity to contact me, send me an email with the form in the contact page
 and make a connection with me!
 
 ## Build Status
 
-<img alt="Static Badge" src="https://img.shields.io/badge/Build-Passing-brightgreen?style=flat">
+<img alt="Static Badge" src="https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge">
 
 ## Features
 
 - Feature 1: You can see all my projects in a single and good looking page!
 - Feature 2: A good way to establish a connection with me!
 - Feature 3: A contact page to communicate directly with me!
+
+Built With
 
 ## Tech Stack
 
