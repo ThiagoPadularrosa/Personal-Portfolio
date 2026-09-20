@@ -3,7 +3,8 @@
 # Personal Portfolio
 <img alt="Static Badge" src="https://img.shields.io/badge/Status-Completed-brightgreen?style=flat">
 
-Here is all my projects organized in a single website where you can see all my coding craft
+A simple Personal Portfolio to see my most recent projects. Also you the opportunity to contact me, send me an email with the form in the contact page
+and make a connection with me!
 
 ## Build Status
 
