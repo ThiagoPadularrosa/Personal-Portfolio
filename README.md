@@ -19,12 +19,10 @@ and make a connection with me!
 - Feature 2: A good way to establish a connection with me!
 - Feature 3: A contact page to communicate directly with me!
 
-Built With
-
 ## Tech Stack
 
 - **Frontend:** HTML, CSS, JavaScript, React, React hooks, Tailwind CSS,
-- **Backend:** Node.js, Express, ReSend
+- **Backend:** Node.js, Express
 - **Database:** MongoDB (NoSQL)
 - **Observability:** Opentelemetry collector, Grafana Cloud, Jaeger
 - **Cloud Platforms:** Vercel
