@@ -6,7 +6,7 @@
   <img alt="Static Badge" src="https://img.shields.io/badge/Licence-Unlicense-21FF85?style=for-the-badge">
 </div>
 
-A simple Personal Portfolio to see my most recent projects. Also you the opportunity to contact me, send me an email with the form in the contact page
+A simple Personal Portfolio to see my most recent projects. Also you have the opportunity to contact me, send me an email with the form in the contact page
 and make a connection with me!
 
 ## Build Status
