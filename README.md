@@ -28,12 +28,19 @@ and make a connection with me!
 - **Cloud Platforms:** Vercel
 - **Containerization:** Docker, Docker Compose
 
-## Installation
+### Installation
 
 How to get this project running locally on your computer:
 
-```bash
-git clone <your-repository-url>
-cd your-project-folder
-# Include any setup commands here (like npm install)
-```
+  1.Clone the repository running this command:
+  ```bash
+  git clone <repository-url>
+  ```
+  2.Change your directory to the folder where the clone is located:
+  ```bash
+  cd your-project-folder
+  ```
+  3.Install npm packages:
+  ```bash
+  npm install
+  ```
