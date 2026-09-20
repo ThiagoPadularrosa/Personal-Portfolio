@@ -30,7 +30,7 @@ and make a connection with me!
 
 ### Installation
 
-How to get this project running locally on your computer:
+<em>How to get this project running locally on your computer:</em>
 
   1.Clone the repository running this command:
   ```bash
