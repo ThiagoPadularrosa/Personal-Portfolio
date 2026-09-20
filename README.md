@@ -1,7 +1,7 @@
 <img width="1704" height="678" alt="Coding2" src="https://github.com/user-attachments/assets/ee420729-6ea9-4c60-bf33-5a5060167791" />
 
 # Personal Portfolio
-
+<img alt="Static Badge" src="https://img.shields.io/badge/Status-Completed-brightgreen?style=flat">
 
 Here is all my projects organized in a single website where you can see all my coding craft
 
